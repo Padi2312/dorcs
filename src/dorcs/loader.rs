@@ -1,6 +1,6 @@
 use std::{fs, path::PathBuf};
 
-use crate::markdown_file::{MarkdownFile, MetaData};
+use super::markdown_file::{MarkdownFile, MetaData};
 use regex::Regex;
 use serde_json::Value;
 

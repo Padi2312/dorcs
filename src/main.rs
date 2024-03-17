@@ -1,11 +1,7 @@
-mod config;
-mod generator;
-mod loader;
-mod markdown_file;
-mod templ_processor;
+mod dorcs;
 
-use config::Config;
-use generator::Generator;
+use dorcs::config::Config;
+use dorcs::generator::Generator;
 
 fn main() {
     let config: Config = Config::load();

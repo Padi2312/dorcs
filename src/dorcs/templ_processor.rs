@@ -3,7 +3,7 @@ use std::path::PathBuf;
 use handlebars::Handlebars;
 use serde_json::Value as JsonValue;
 
-static TEMPLATE_FILE: &'static str = include_str!("templates/default.html");
+static TEMPLATE_FILE: &'static str = include_str!("../templates/default.html");
 
 pub struct TemplProcessor<'a> {
     pub files_list: Vec<PathBuf>,

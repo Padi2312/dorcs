@@ -4,7 +4,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::{config::Config, loader, templ_processor};
+use super::{config::Config, loader::Loader, templ_processor::TemplProcessor};
 
 pub struct Generator {
     pub config: Config,
@@ -16,8 +16,8 @@ impl Generator {
     }
 
     pub fn generate_docs(&self) {
-        let handler = templ_processor::TemplProcessor::new();
-        let mut document_loader = loader::Loader::new(self.config.source.to_string());
+        let handler = TemplProcessor::new();
+        let mut document_loader = Loader::new(self.config.source.to_string());
         document_loader.load();
 
         let links = document_loader.get_links();
