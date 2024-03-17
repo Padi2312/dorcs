@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Documentation Page</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        color: #333;
+      }
+
+      /* Navbar styles */
+      .navbar {
+        background-color: #2980b9; /* Change this color to fit your design */
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 20px;
+      }
+      .navbar a,
+      .navbar div {
+        color: white;
+        text-decoration: none;
+        padding: 15px 20px;
+      }
+      .navbar a:hover,
+      .navbar div:hover {
+        background-color: #3498db; /* Change this color to fit your design */
+        cursor: pointer;
+      }
+
+      /* Navbar sidebar toggle for mobile */
+      .navbar .sidebar-toggle {
+        display: none; /* Hidden by default */
+      }
+
+      .container {
+        display: flex;
+        min-height: 100vh;
+      }
+      .sidebar {
+        background-color: #2c3e50;
+        color: white;
+        padding: 15px;
+        width: 250px;
+      }
+      .content {
+        flex: 1;
+        padding: 40px;
+        padding-top: 60px; /* Adjust the padding to not overlap the navbar */
+        background-color: #ecf0f1;
+      }
+      .menu-item {
+        padding: 10px 5px;
+        color: #ecf0f1;
+      }
+
+      .menu-item {
+        color: #ecf0f1;
+        text-decoration: none;
+      }
+
+      .menu-item:hover {
+        background-color: #34495e;
+        cursor: pointer;
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      .menu-item:hover {
+        color: #3498db;
+      }
+
+      @media (max-width: 768px) {
+        /* Show the sidebar toggle inside the navbar for mobile view */
+        .navbar .sidebar-toggle {
+          display: block; /* Show the toggle */
+          padding: 0;
+        }
+        /* Hide the sidebar by default in mobile view */
+        .sidebar {
+          display: none;
+        }
+        /* When sidebar is opened, add padding to content */
+        .content {
+          padding-top: 60px;
+        }
+      }
+      .sidebar-toggle {
+        display: block;
+        position: fixed;
+        top: 15px;
+        left: 10px;
+        cursor: pointer;
+        z-index: 3;
+      }
+      .sidebar-toggle img {
+        width: 10px;
+        height: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <div class="sidebar-toggle" onclick="toggleSidebar()">
+        &#9776;
+        <!-- This is a simple "hamburger" icon -->
+      </div>
+      <a href="#">Home</a>
+      <a href="#">Docs</a>
+      <a href="#">API</a>
+      <a href="#">Blog</a>
+      <!-- Add other navbar links here -->
+    </div>
+
+    <div class="container">
+      <aside class="sidebar">
+        {{#each links}}
+        <a href="{{link}}">
+          <div class="menu-item">{{title}}</div>
+        </a>
+        {{/each}}
+      </aside>
+
+      <main class="content">{{{content}}}</main>
+    </div>
+
+    <script>
+      function toggleSidebar() {
+        const sidebar = document.querySelector(".sidebar");
+        const content = document.querySelector(".content");
+        const displayStatus = sidebar.style.display;
+
+        sidebar.style.display = displayStatus === "block" ? "none" : "block";
+        content.style.paddingTop = displayStatus === "block" ? "60px" : "160px";
+      }
+    </script>
+  </body>
+</html>
