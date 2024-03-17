@@ -2,8 +2,8 @@ use std::path::Path;
 
 pub struct Config {
     pub title: String,
-    pub input_dir: String,
-    pub output_dir: String,
+    pub source: String,
+    pub output: String,
 }
 
 impl Config {
@@ -19,8 +19,8 @@ impl Config {
     fn default() -> Config {
         Config {
             title: "Documentation".to_string(),
-            input_dir: "docs".to_string(),
-            output_dir: "docs_build".to_string(),
+            source: "docs".to_string(),
+            output: "output".to_string(),
         }
     }
 
@@ -31,16 +31,13 @@ impl Config {
             .as_str()
             .unwrap_or("Documentation")
             .to_string();
-        let input_dir = data["input_dir"].as_str().unwrap_or("docs").to_string();
-        let output_dir = data["output_dir"]
-            .as_str()
-            .unwrap_or("docs_build")
-            .to_string();
+        let source = data["source"].as_str().unwrap_or("docs").to_string();
+        let output = data["output"].as_str().unwrap_or("docs_build").to_string();
 
         Config {
-            title: title,
-            input_dir: input_dir,
-            output_dir: output_dir,
+            title,
+            source,
+            output,
         }
     }
 }

@@ -17,7 +17,7 @@ impl Generator {
 
     pub fn generate_docs(&self) {
         let handler = templ_processor::TemplProcessor::new();
-        let mut document_loader = loader::Loader::new(self.config.input_dir.to_string());
+        let mut document_loader = loader::Loader::new(self.config.source.to_string());
         document_loader.load();
 
         let links = document_loader.get_links();
@@ -29,7 +29,7 @@ impl Generator {
                 handler.process_templ(self.config.title.to_string(), html, links.clone());
 
             let file_path = self.change_file_extension(&PathBuf::from(doc.path), "html");
-            let save_path = self.get_save_path(&file_path, &self.config.output_dir);
+            let save_path = self.get_save_path(&file_path, &self.config.output);
             self.create_parent_dirs(&save_path);
 
             let mut file = fs::File::create(save_path).unwrap();
@@ -38,7 +38,7 @@ impl Generator {
     }
 
     fn get_save_path(&self, file: &PathBuf, output_dir: &str) -> PathBuf {
-        let file_path = file.strip_prefix(&self.config.input_dir).unwrap();
+        let file_path = file.strip_prefix(&self.config.source).unwrap();
         let file_path = PathBuf::from(file_path);
         let save_path = Path::new(output_dir).join(file_path);
         save_path
