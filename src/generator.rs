@@ -4,35 +4,32 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use crate::{loader, templ_processor};
+use crate::{config::Config, loader, templ_processor};
 
 pub struct Generator {
-    pub input_dir: String,
-    pub output_dir: String,
+    pub config: Config,
 }
 
 impl Generator {
-    pub fn new(input_dir: String, output_dir: String) -> Generator {
-        Generator {
-            input_dir,
-            output_dir,
-        }
+    pub fn new(config: Config) -> Generator {
+        Generator { config }
     }
 
     pub fn generate_docs(&self) {
         let handler = templ_processor::TemplProcessor::new();
-        let mut document_loader = loader::Loader::new();
-        document_loader.load(&self.input_dir);
+        let mut document_loader = loader::Loader::new(self.config.input_dir.to_string());
+        document_loader.load();
 
         let links = document_loader.get_links();
 
         let documents = document_loader.documents;
         for doc in documents {
             let html = doc.to_html();
-            let processed_html = handler.process_templ(html, links.clone());
+            let processed_html =
+                handler.process_templ(self.config.title.to_string(), html, links.clone());
 
             let file_path = self.change_file_extension(&PathBuf::from(doc.path), "html");
-            let save_path = self.get_save_path(&file_path, &self.output_dir);
+            let save_path = self.get_save_path(&file_path, &self.config.output_dir);
             self.create_parent_dirs(&save_path);
 
             let mut file = fs::File::create(save_path).unwrap();
@@ -41,7 +38,7 @@ impl Generator {
     }
 
     fn get_save_path(&self, file: &PathBuf, output_dir: &str) -> PathBuf {
-        let file_path = file.strip_prefix(&self.input_dir).unwrap();
+        let file_path = file.strip_prefix(&self.config.input_dir).unwrap();
         let file_path = PathBuf::from(file_path);
         let save_path = Path::new(output_dir).join(file_path);
         save_path

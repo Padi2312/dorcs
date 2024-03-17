@@ -1,22 +1,25 @@
 use std::{fs, path::PathBuf};
 
-use crate::markdown_file::{MetaData, MarkdownFile};
+use crate::markdown_file::{MarkdownFile, MetaData};
 use regex::Regex;
 use serde_json::Value;
 
 pub struct Loader {
+    input_dir: String,
     pub documents: Vec<MarkdownFile>,
 }
 
 impl Loader {
-    pub fn new() -> Loader {
+    pub fn new(input_dir: String) -> Loader {
         Loader {
+            input_dir,
             documents: Vec::new(),
         }
     }
 
-    pub fn load(&mut self, input_dir: &str) {
-        let files_list = self.load_documents(input_dir);
+    pub fn load(&mut self) {
+        let input_dir = self.input_dir.clone();
+        let files_list = self.load_documents(&input_dir);
         for file in files_list {
             let title = file.file_name().unwrap().to_string_lossy().to_string();
             let content = fs::read_to_string(&file).unwrap();
@@ -49,7 +52,7 @@ impl Loader {
         });
 
         for doc in sorted_documents {
-            let file_path = doc.path.replace("docs", "");
+            let file_path = doc.path.replace(&self.input_dir, "");
             let file_path = file_path.split('.').next().unwrap();
             let file_path = format!("{}.html", file_path);
             data.push(serde_json::json!({
@@ -73,7 +76,12 @@ impl Loader {
                         files_list.extend(self.load_documents(path.to_str().unwrap_or("")));
                     } else {
                         // Add the file's path as a string
-                        files_list.push(path);
+                        // Check if file has a markdown extension
+                        if let Some(ext) = path.extension() {
+                            if ext == "md" {
+                                files_list.push(path);
+                            }
+                        }
                     }
                 }
             }

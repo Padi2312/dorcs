@@ -6,7 +6,7 @@ edition = "2021"
 authors = ["Patrick Arndt <patrick.arndt.99@web.de>"]
 
 [[bin]]
-name = "statiker"      # Name of the binary
+name = "dorcs"         # Name of the binary
 path = "./src/main.rs" # Path to the source file
 
 [dependencies]
