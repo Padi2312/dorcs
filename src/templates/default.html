@@ -28,6 +28,13 @@
     </div>
 
     <script>
+      window.onload = function () {
+        const darkMode = sessionStorage.getItem("dark-mode");
+        if (darkMode === "true") {
+          document.body.classList.add("dark-mode");
+        }
+      };
+
       function toggleSidebar() {
         const sidebar = document.querySelector(".sidebar");
         sidebar.classList.toggle("active");
@@ -37,6 +44,7 @@
         document.body.classList.toggle("dark-mode");
         const darkModeToggle = document.querySelector(".dark-mode-toggle");
         const isDarkMode = document.body.classList.contains("dark-mode");
+        sessionStorage.setItem("dark-mode", isDarkMode);
         darkModeToggle.textContent = isDarkMode ? "☀️" : "🌛";
       }
     </script>
