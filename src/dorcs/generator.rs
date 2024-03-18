@@ -4,7 +4,11 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use super::{config::Config, loader::Loader, templ_processor::TemplProcessor};
+use super::{
+    config::Config,
+    loader::Loader,
+    templ_processor::{TemplProcessor, CSS_TEMPLATE_FILE},
+};
 
 pub struct Generator {
     pub config: Config,
@@ -37,6 +41,7 @@ impl Generator {
         }
 
         self.copy_asset_files(document_loader.assets);
+        self.write_css_file();
     }
 
     fn copy_asset_files(&self, static_files: Vec<PathBuf>) {
@@ -45,6 +50,13 @@ impl Generator {
             self.create_parent_dirs(&save_path);
             fs::copy(&file, save_path).unwrap();
         }
+    }
+
+    fn write_css_file(&self) {
+        let css = CSS_TEMPLATE_FILE;
+        let save_path = Path::new(&self.config.output).join("default.css");
+        let mut file = fs::File::create(save_path).unwrap();
+        file.write_all(css.as_bytes()).unwrap();
     }
 
     fn get_save_path(&self, file: &PathBuf, output_dir: &str) -> PathBuf {

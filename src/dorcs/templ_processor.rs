@@ -4,6 +4,7 @@ use handlebars::Handlebars;
 use serde_json::Value as JsonValue;
 
 static TEMPLATE_FILE: &'static str = include_str!("../templates/default.html");
+pub static CSS_TEMPLATE_FILE: &'static str = include_str!("../templates/default.css");
 
 pub struct TemplProcessor<'a> {
     pub files_list: Vec<PathBuf>,
