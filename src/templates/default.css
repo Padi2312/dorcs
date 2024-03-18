@@ -210,7 +210,7 @@ a:hover {
   }
 }
 
-@media (min-width: 1240px) {
+@media (min-width: 1520px) {
   .sidebar {
     width: 300px;
   }
@@ -219,7 +219,7 @@ a:hover {
   }
 }
 
-@media (min-width: 1680px) {
+@media (min-width: 2000px) {
   .content {
     padding: 60px 25%;
   }

@@ -1,7 +1,7 @@
 use std::path::Path;
 
 pub struct Config {
-    pub title: String,
+    pub page_title: String,
     pub source: String,
     pub output: String,
 }
@@ -18,7 +18,7 @@ impl Config {
 
     fn default() -> Config {
         Config {
-            title: "Documentation".to_string(),
+            page_title: "Documentation".to_string(),
             source: "docs".to_string(),
             output: "output".to_string(),
         }
@@ -27,7 +27,7 @@ impl Config {
     fn from_file(file_path: &str) -> Config {
         let content = std::fs::read_to_string(file_path).unwrap();
         let data: serde_json::Value = serde_json::from_str(&content).unwrap();
-        let title = data["title"]
+        let page_title = data["page_title"]
             .as_str()
             .unwrap_or("Documentation")
             .to_string();
@@ -35,7 +35,7 @@ impl Config {
         let output = data["output"].as_str().unwrap_or("output").to_string();
 
         Config {
-            title,
+            page_title,
             source,
             output,
         }

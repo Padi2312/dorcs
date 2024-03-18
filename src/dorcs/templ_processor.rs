@@ -22,12 +22,7 @@ impl<'a> TemplProcessor<'a> {
         }
     }
 
-    pub fn process_templ(&self, title: String, content: String, links: Vec<JsonValue>) -> String {
-        let data = serde_json::json!({
-            "title":title,
-            "content": content,
-            "links": links
-        });
+    pub fn process_json(&self, data: JsonValue) -> String {
         let result = self.reg.render("default", &data);
         if result.is_err() {
             panic!("Error rendering template: {:?}", result.err());

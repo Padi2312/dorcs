@@ -1,8 +1,7 @@
 use std::{fs, path::PathBuf};
 
-use super::markdown_file::{MarkdownFile, MetaData};
+use super::markdown_file::{Link, MarkdownFile, MetaData};
 use regex::Regex;
-use serde_json::Value;
 
 pub struct Loader {
     input_dir: String,
@@ -25,7 +24,7 @@ impl Loader {
 
         let markdown_files = files_list.0;
         let static_files = files_list.1;
-        for file in markdown_files{
+        for file in markdown_files {
             let title = file.file_name().unwrap().to_string_lossy().to_string();
             let content = fs::read_to_string(&file).unwrap();
             let mut meta_data = self.parse_metadata(&content);
@@ -47,7 +46,7 @@ impl Loader {
         self.assets = static_files;
     }
 
-    pub fn get_links(&self) -> Vec<Value> {
+    pub fn get_links(&self) -> Vec<Link> {
         let mut data = Vec::new();
         let sorted_documents = self.documents.clone();
         let mut sorted_documents: Vec<&MarkdownFile> = sorted_documents.iter().collect();
@@ -62,10 +61,10 @@ impl Loader {
             let file_path = doc.path.replace(&self.input_dir, "");
             let file_path = file_path.split('.').next().unwrap();
             let file_path = format!("{}.html", file_path);
-            data.push(serde_json::json!({
-                "title": doc.meta_data.title,
-                "link": file_path
-            }));
+            data.push(Link {
+                name: doc.meta_data.title.clone(),
+                url: file_path,
+            });
         }
         data
     }

@@ -4,20 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="default.css" />
-    <title>{{title}}</title>
+    <title>{{page_title}}</title>
   </head>
   <body>
     <div class="navbar">
       <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div>
-      <div class="navbar-title">Documentation Page</div>
+      <div class="navbar-title">{{page_title}}</div>
       <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌛</div>
     </div>
 
     <div class="container">
       <aside class="sidebar">
         {{#each links}}
-        <a href="{{link}}">
-          <div class="menu-item">{{title}}</div>
+        <a href="{{url}}">
+          <div class="menu-item">{{name}}</div>
         </a>
         {{/each}}
       </aside>

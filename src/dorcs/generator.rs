@@ -4,6 +4,8 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use serde_json::{json, Value};
+
 use super::{
     config::Config,
     loader::Loader,
@@ -25,12 +27,17 @@ impl Generator {
         document_loader.load();
 
         let links = document_loader.get_links();
+        let links: Vec<Value> = links.iter().map(|link| link.to_json()).collect();
 
         let documents = document_loader.documents;
         for doc in documents {
             let html = doc.to_html();
-            let processed_html =
-                handler.process_templ(self.config.title.to_string(), html, links.clone());
+            let processed_html = handler.process_json(json!({
+                "content": html ,
+                "title": doc.meta_data.title,
+                "page_title":self.config.page_title,
+                "links": links.clone(),
+            }));
 
             let file_path = self.change_file_extension(&PathBuf::from(doc.path), "html");
             let save_path = self.get_save_path(&file_path, &self.config.output);

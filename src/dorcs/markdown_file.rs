@@ -1,4 +1,4 @@
-use markdown::{CompileOptions, Options, ParseOptions};
+use markdown::{CompileOptions, Options};
 
 #[derive(Debug, Clone)]
 pub struct MarkdownFile {
@@ -27,5 +27,20 @@ impl MarkdownFile {
             panic!("Error rendering markdown: {:?}", html.err());
         }
         html.unwrap()
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct Link {
+    pub name: String,
+    pub url: String,
+}
+
+impl Link {
+    pub fn to_json(&self) -> serde_json::Value {
+        serde_json::json!({
+            "name": self.name,
+            "url": self.url
+        })
     }
 }
