@@ -1,6 +1,6 @@
 ---
 title: Themes
-position: 5
+position: 4
 ---
 
 # Themes (Coming Soon)

@@ -28,6 +28,8 @@ cargo build --release
 
 ## Usage
 
+**Note:** You should have a `docs` directory in your project with markdown files. If you don't have one, you can create one and add some markdown files to it.
+
 To generate documentation, run the following command in your project with the documentation folder:
 
 ```sh

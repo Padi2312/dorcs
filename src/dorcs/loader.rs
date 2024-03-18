@@ -7,6 +7,7 @@ use serde_json::Value;
 pub struct Loader {
     input_dir: String,
     pub documents: Vec<MarkdownFile>,
+    pub assets: Vec<PathBuf>,
 }
 
 impl Loader {
@@ -14,13 +15,17 @@ impl Loader {
         Loader {
             input_dir,
             documents: Vec::new(),
+            assets: Vec::new(),
         }
     }
 
     pub fn load(&mut self) {
         let input_dir = self.input_dir.clone();
         let files_list = self.load_documents(&input_dir);
-        for file in files_list {
+
+        let markdown_files = files_list.0;
+        let static_files = files_list.1;
+        for file in markdown_files{
             let title = file.file_name().unwrap().to_string_lossy().to_string();
             let content = fs::read_to_string(&file).unwrap();
             let mut meta_data = self.parse_metadata(&content);
@@ -38,6 +43,8 @@ impl Loader {
             };
             self.documents.push(document);
         }
+
+        self.assets = static_files;
     }
 
     pub fn get_links(&self) -> Vec<Value> {
@@ -63,8 +70,9 @@ impl Loader {
         data
     }
 
-    fn load_documents(&mut self, dir: &str) -> Vec<PathBuf> {
+    fn load_documents(&mut self, dir: &str) -> (Vec<PathBuf>, Vec<PathBuf>) {
         let mut files_list = Vec::new();
+        let mut asset_files_list = Vec::new();
         let dir_path = PathBuf::from(dir);
 
         if dir_path.is_dir() {
@@ -73,13 +81,18 @@ impl Loader {
                     let path = entry.path();
                     if path.is_dir() {
                         // Convert the path to a string and recursively list files
-                        files_list.extend(self.load_documents(path.to_str().unwrap_or("")));
+                        let list = self.load_documents(path.to_str().unwrap_or(""));
+                        files_list.extend(list.0);
+                        asset_files_list.extend(list.1);
                     } else {
                         // Add the file's path as a string
                         // Check if file has a markdown extension
+                        // If no markdown extension, add to static files list
                         if let Some(ext) = path.extension() {
                             if ext == "md" {
                                 files_list.push(path);
+                            } else {
+                                asset_files_list.push(path);
                             }
                         }
                     }
@@ -87,7 +100,7 @@ impl Loader {
             }
         }
 
-        files_list
+        (files_list, asset_files_list)
     }
 
     fn parse_metadata(&self, content: &str) -> MetaData {

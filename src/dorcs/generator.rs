@@ -35,6 +35,16 @@ impl Generator {
             let mut file = fs::File::create(save_path).unwrap();
             file.write_all(processed_html.as_bytes()).unwrap();
         }
+
+        self.copy_asset_files(document_loader.assets);
+    }
+
+    fn copy_asset_files(&self, static_files: Vec<PathBuf>) {
+        for file in static_files {
+            let save_path = self.get_save_path(&file, &self.config.output);
+            self.create_parent_dirs(&save_path);
+            fs::copy(&file, save_path).unwrap();
+        }
     }
 
     fn get_save_path(&self, file: &PathBuf, output_dir: &str) -> PathBuf {
