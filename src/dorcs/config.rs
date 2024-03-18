@@ -32,7 +32,7 @@ impl Config {
             .unwrap_or("Documentation")
             .to_string();
         let source = data["source"].as_str().unwrap_or("docs").to_string();
-        let output = data["output"].as_str().unwrap_or("docs_build").to_string();
+        let output = data["output"].as_str().unwrap_or("output").to_string();
 
         Config {
             title,
