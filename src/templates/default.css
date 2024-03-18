@@ -27,6 +27,13 @@ html {
   background-color: var(--background-color);
 }
 
+.dark-mode body,
+html,
+.container {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
 .navbar {
   background-color: var(--primary-color);
   display: flex;
@@ -133,6 +140,27 @@ tbody tr:hover {
   background-color: #f0f0f0;
 }
 
+.dark-mode table {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode th {
+  background-color: var(--secondary-color);
+  color: #ffffff;
+}
+
+.dark-mode tbody tr:nth-child(odd) {
+  background-color: #3b3b3b;
+}
+
+.dark-mode tbody tr:nth-child(even) {
+  background-color: #323232;
+}
+
+.dark-mode tbody tr:hover {
+  background-color: #2c2c2c;
+}
+
 a {
   color: var(--primary-color);
   text-decoration: none;
@@ -140,6 +168,16 @@ a {
 
 a:hover {
   color: var(--link-hover-color);
+  text-decoration: underline;
+}
+
+.dark-mode a {
+  color: #2980b9;
+  text-decoration: none;
+}
+
+.dark-mode a:hover {
+  color: #369fe5;
   text-decoration: underline;
 }
 
