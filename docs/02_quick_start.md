@@ -25,8 +25,9 @@ cargo build --release
 ./target/release/dorcs
 ```
 
-
 ## Usage
+
+Also have a look at the [usage guide](./05_usage) for more details.
 
 **Note:** You should have a `docs` directory in your project with markdown files. If you don't have one, you can create one and add some markdown files to it.
 
