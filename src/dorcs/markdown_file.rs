@@ -13,7 +13,10 @@ pub struct MetaData {
 
 impl MarkdownFile {
     pub fn to_html(&self) -> String {
-        let html = markdown::to_html(&self.content);
-        html
+        let html = markdown::to_html_with_options(&self.content, &markdown::Options::gfm());
+        if html.is_err() {
+            panic!("Error rendering markdown: {:?}", html.err());
+        }
+        html.unwrap()
     }
 }

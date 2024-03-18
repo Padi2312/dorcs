@@ -47,7 +47,7 @@ impl Loader {
         sorted_documents.sort_by(|a, b| {
             a.meta_data
                 .position
-                .unwrap_or(0)
+                .unwrap_or(999)
                 .cmp(&b.meta_data.position.unwrap_or(0))
         });
 

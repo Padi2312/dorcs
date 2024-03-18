@@ -5,120 +5,235 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Documentation Page</title>
     <style>
-      body {
-        margin: 0;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        color: #333;
+      :root {
+        --primary-color: #2980b9;
+        --secondary-color: #2c3e50;
+        --accent-color: #34495e;
+        --background-color: #ecf0f1;
+        --text-color: #333;
+        --link-hover-color: #3498db;
+        --font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        --border-radius: 8px;
       }
 
-      /* Navbar styles */
+      .dark-mode {
+        --primary-color: #333333;
+        --secondary-color: #444444;
+        --accent-color: #555555;
+        --background-color: #1f1f1f;
+        --text-color: #cccccc;
+        --link-color: #efefef;
+        --link-hover-color: #dddddd;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        font-family: var(--font-family);
+        color: var(--text-color);
+        background-color: var(--background-color);
+      }
+
       .navbar {
-        background-color: #2980b9; /* Change this color to fit your design */
+        background-color: var(--primary-color);
         color: white;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 0;
-        padding-left: 25px;
+        padding: 0 20px;
         height: 50px;
       }
-      .navbar a,
-      .navbar div {
-        color: white;
-        text-decoration: none;
-        padding: 15px 20px;
-      }
-      .navbar a:hover,
-      .navbar div:hover {
-        background-color: #3498db; /* Change this color to fit your design */
-        cursor: pointer;
-      }
 
-      /* Navbar sidebar toggle for mobile */
-      .navbar .sidebar-toggle {
-        display: none; /* Hidden by default */
+      .sidebar-toggle,
+      .dark-mode-toggle {
+        cursor: pointer;
       }
 
       .container {
         display: flex;
-        min-height: 100vh;
+        height: calc(100vh - 50px);
       }
+
       .sidebar {
-        background-color: #2c3e50;
+        background-color: var(--secondary-color);
         color: white;
         padding: 15px;
         width: 250px;
+        font-weight: bold;
+        position: fixed;
+        height: calc(100vh - 50px);
+        overflow-y: auto;
+        left: -100%;
+        transition: left 0.3s ease;
       }
-      .content {
-        flex: 1;
-        padding: 40px;
-        padding-top: 60px; /* Adjust the padding to not overlap the navbar */
-        background-color: #ecf0f1;
+
+      .sidebar.active {
+        left: 0; /* Slide in sidebar */
       }
+
       .menu-item {
         padding: 10px 5px;
         color: #ecf0f1;
-      }
-
-      .menu-item {
-        color: #ecf0f1;
         text-decoration: none;
+        display: block; /* Ensure clickable area extends to full width */
       }
 
       .menu-item:hover {
-        background-color: #34495e;
+        background-color: var(--accent-color);
+        cursor: pointer;
+        color: var(--link-hover-color);
+      }
+
+      .content {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto; /* Ensure content is scrollable */
+        display: flex;
+        justify-content: center;
+      }
+
+      /* .content-container {
+        max-width: 1200px;
+      } */
+
+      /** Code block styles */
+      pre {
+        background-color: #f4f4f4;
+        border-left: 4px solid var(--primary-color);
+        padding: 1em;
+        overflow-x: auto;
+        border-radius: var(--border-radius);
+        font-family: "Courier New", Courier, monospace;
+        margin: 20px 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark-mode pre {
+        background-color: #333333;
+        border-left-color: var(--accent-color);
+      }
+
+      table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 20px 0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: var(--border-radius);
+        overflow: hidden;
+      }
+
+      th,
+      td {
+        text-align: left;
+        padding: 16px;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      th {
+        background-color: var(--primary-color);
+        color: white;
+        font-weight: bold;
+      }
+
+      tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+      }
+
+      tbody tr:nth-child(even) {
+        background-color: #ffffff;
+      }
+
+      tbody tr:hover {
+        background-color: #f0f0f0;
         cursor: pointer;
       }
 
+      .dark-mode table {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Slightly darker shadow for depth */
+      }
+
+      .dark-mode th {
+        background-color: var(
+          --secondary-color
+        ); /* Use the darker theme color for headers */
+        color: #ffffff; /* Ensure text is light for contrast */
+      }
+
+      .dark-mode tbody tr:nth-child(odd) {
+        background-color: #3b3b3b; /* Slightly lighter than the dark mode background for contrast */
+      }
+
+      .dark-mode tbody tr:nth-child(even) {
+        background-color: #323232; /* Dark mode background color, slightly darker for contrast */
+      }
+
+      .dark-mode tbody tr:hover {
+        background-color: #2c2c2c; /* Darker than even rows for hover effect */
+      }
       a {
-        text-decoration: none;
+        color: var(
+          --primary-color
+        ); /* A color that stands out against the light background */
+        text-decoration: none; /* Optional: removes underline from links */
       }
 
-      .menu-item:hover {
-        color: #3498db;
+      .dark-mode a {
+        color: #325eaf;
       }
 
-      @media (max-width: 768px) {
-        /* Show the sidebar toggle inside the navbar for mobile view */
+      a:hover {
+        color: var(
+          --link-hover-color
+        ); /* A slightly different shade for hover effect */
+        text-decoration: underline; /* Optional: adds underline on hover for clarity */
+      }
+      @media (min-width: 768px) {
         .navbar .sidebar-toggle {
-          display: block; /* Show the toggle */
-          padding: 0;
+          display: none; /* Hide toggle button on larger screens */
         }
-        /* Hide the sidebar by default in mobile view */
+        .container {
+          display: flex;
+        }
+
         .sidebar {
-          display: none;
+          position: relative; /* Sidebar is positioned normally on larger screens */
+          height: auto;
+          overflow-y: visible;
+          left: 0;
         }
-        /* When sidebar is opened, add padding to content */
+
         .content {
-          padding-top: 60px;
+          padding: 40px; /* Increased padding for larger screens */
         }
       }
-      .sidebar-toggle {
-        display: block;
-        position: fixed;
-        top: 15px;
-        left: 10px;
-        cursor: pointer;
-        z-index: 3;
+
+      @media (min-width: 1024px) {
+        .content {
+          padding: 60px 80px; /* Further increased padding for even larger screens */
+        }
       }
-      .sidebar-toggle img {
-        width: 10px;
-        height: 10px;
+
+      @media (min-width: 1440px) {
+        .content {
+          padding: 60px 20%; /* Further increased padding for even larger screens */
+        }
+      }
+
+      @media (min-width: 1680px) {
+        .content {
+          padding: 60px 20%; /* Further increased padding for even larger screens */
+        }
       }
     </style>
   </head>
   <body>
     <div class="navbar">
-      <div class="sidebar-toggle" onclick="toggleSidebar()">
-        &#9776;
-        <!-- This is a simple "hamburger" icon -->
-      </div>
-      {{title}}
-      <!-- <a href="#">Home</a>
-      <a href="#">Docs</a>
-      <a href="#">API</a>
-      <a href="#">Blog</a> -->
-      <!-- Add other navbar links here -->
+      <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div>
+      <div class="navbar-title">Documentation Page</div>
+      <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌛</div>
     </div>
 
     <div class="container">
@@ -130,17 +245,22 @@
         {{/each}}
       </aside>
 
-      <main class="content">{{{content}}}</main>
+      <main class="content">
+        <div class="content-container">{{{content}}}</div>
+      </main>
     </div>
 
     <script>
       function toggleSidebar() {
         const sidebar = document.querySelector(".sidebar");
-        const content = document.querySelector(".content");
-        const displayStatus = sidebar.style.display;
+        sidebar.classList.toggle("active");
+      }
 
-        sidebar.style.display = displayStatus === "block" ? "none" : "block";
-        content.style.paddingTop = displayStatus === "block" ? "60px" : "160px";
+      function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+        const darkModeToggle = document.querySelector(".dark-mode-toggle");
+        const isDarkMode = document.body.classList.contains("dark-mode");
+        darkModeToggle.textContent = isDarkMode ? "☀️" : "🌛";
       }
     </script>
   </body>
