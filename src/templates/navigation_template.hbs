@@ -1,14 +1,15 @@
 {{#each this}}
   {{#if is_section}}
     <div class="menu-section">
-      <div class="menu-section-title">{{title}}</div>
+      <div class="menu-section-title" onclick="toggleSubMenu(this)">
+        {{title}}
+        <span class="arrow">&#9660;</span> <!-- Downward arrow symbol -->
+      </div>
       <div class="submenu">
         {{> navigation_template children}}
       </div>
     </div>
   {{else}}
-    <div class="menu-item">
-      <a href="{{url}}">{{title}}</a>
-    </div>
+      <a class="menu-item" href="{{url}}">{{title}}</a>
   {{/if}}
 {{/each}}

@@ -93,6 +93,19 @@ html {
   padding-left: 20px;
 }
 
+.submenu {
+  display: none; /* Hide submenu by default */
+}
+
+.menu-section-title {
+  cursor: pointer; /* Change mouse cursor on hover */
+}
+
+.menu-section-title .arrow {
+  float: right; /* Position the arrow to the right */
+  transform: rotate(90deg); /* Rotate the arrow 90 degrees */
+}
+
 .content {
   padding: 20px;
   overflow-y: auto;
