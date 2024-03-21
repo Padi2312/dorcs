@@ -1,0 +1,12 @@
+{{#each this}}
+  <div class="menu-item">
+    {{#if children}}
+      <div>{{title}}</div>
+      <div class="submenu">
+          {{> navigation_template children}}
+      </div>
+    {{else}}
+      <a href="{{url}}">{{title}}</a>
+    {{/if}}
+  </div>
+{{/each}}

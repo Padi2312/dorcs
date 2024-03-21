@@ -28,7 +28,7 @@ html {
 }
 
 .dark-mode body,
-html,
+.dark-mode html,
 .container {
   background-color: var(--background-color);
   color: var(--text-color);
@@ -72,7 +72,6 @@ html,
 
 .menu-item {
   padding: 10px 5px;
-  color: #ecf0f1;
   text-decoration: none;
   display: block;
 }
@@ -81,6 +80,12 @@ html,
   background-color: var(--accent-color);
   color: var(--link-hover-color);
   cursor: pointer;
+}
+
+.submenu {
+  list-style-type: none;
+  padding: 0;
+  padding-left: 20px;
 }
 
 .content {
@@ -111,6 +116,7 @@ pre {
   background-color: #333333;
   border-left-color: var(--accent-color);
 }
+
 table {
   width: 100%;
   border-collapse: collapse;

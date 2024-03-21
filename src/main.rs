@@ -1,10 +1,12 @@
 mod dorcs;
 
-use dorcs::config::Config;
-use dorcs::generator::Generator;
+use dorcs::sections;
 
 fn main() {
-    let config: Config = Config::load();
-    let generator = Generator::new(config);
-    generator.generate_docs();
+    let section_constructor = sections::SectionGenerator::new("docs".into());
+    let section = section_constructor.construct();
+    println!("Section: {:#?}", section);
+
+    let section_handler = sections::SectionHandler::new(section);
+    section_handler.execute("output");
 }
