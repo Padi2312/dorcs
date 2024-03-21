@@ -82,6 +82,11 @@ html {
   cursor: pointer;
 }
 
+.menu-section-title {
+  padding: 10px 5px;
+  display: block;
+}
+
 .submenu {
   list-style-type: none;
   padding: 0;

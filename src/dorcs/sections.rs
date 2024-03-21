@@ -82,7 +82,7 @@ impl<'a> SectionHandler<'a> {
 
     pub fn execute(&self, out_dir: &str) {
         println!("Root section: {:#?}", self.root_section);
-        let navigation_list = generate_navigation(&self.root_section);
+        let navigation_list = generate_navigation(&self.root_section, &self.root_section.path);
         if navigation_list.is_err() {
             panic!("No navigation list generated");
         }

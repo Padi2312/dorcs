@@ -17,33 +17,77 @@ pub struct Navigation {
     pub position: Option<i32>,
     pub url: String,
     pub children: Option<Vec<Navigation>>,
+    pub is_section: bool,
 }
 
-// Generates a navigation structure from a given root section.
+// Generates a navigation structure from a given section.
 pub fn generate_navigation(
-    root_section: &Section,
+    section: &Section,
+    root_path: &Path,
 ) -> Result<Vec<Navigation>, Box<dyn std::error::Error>> {
     let mut navigation_list = Vec::new();
-    // Process markdown files in the root section.
-    for file in &root_section.files {
+
+    // Process markdown files in the section.
+    for file in &section.files {
         if is_markdown_file(file) {
-            if let Ok(navigation) = create_navigation_from_file(file, &root_section.path) {
+            if let Ok(navigation) = create_navigation_from_file(file, root_path) {
                 navigation_list.push(navigation);
             }
         }
     }
+
     // Process subsections recursively.
-    if let Some(sections) = &root_section.sections {
-        for section in sections {
+    if let Some(sections) = &section.sections {
+        for subsection in sections {
             // Create navigation entries for subsections.
-            if let Some(section_nav) = create_section_navigation(section, &root_section.path) {
-                navigation_list.push(section_nav);
+            if let Some(subsection_nav) = create_section_navigation(subsection, root_path)? {
+                navigation_list.push(subsection_nav);
             }
         }
     }
+
     // Sort navigation entries by their position, placing entries without a position at the end.
     navigation_list.sort_by_key(|nav| nav.position.unwrap_or(std::i32::MAX));
     Ok(navigation_list)
+}
+
+// Creates a navigation entry for a given section.
+fn create_section_navigation(
+    section: &Section,
+    root_path: &Path,
+) -> Result<Option<Navigation>, Box<dyn std::error::Error>> {
+    let mut children = Vec::new();
+
+    // Process markdown files in the section.
+    for file in &section.files {
+        if is_markdown_file(file) {
+            if let Ok(navigation) = create_navigation_from_file(file, root_path) {
+                children.push(navigation);
+            }
+        }
+    }
+
+    // Process subsections recursively.
+    if let Some(sections) = &section.sections {
+        for subsection in sections {
+            let subsection_nav = create_section_navigation(subsection, root_path)?;
+            children.extend(subsection_nav);
+        }
+    }
+
+    // Sort navigation entries by their position, placing entries without a position at the end.
+    children.sort_by_key(|nav| nav.position.unwrap_or(std::i32::MAX));
+    
+
+    // Only create a navigation entry if the section has a title.
+    let navigation = Navigation {
+        title: section.path.file_name().unwrap().to_string_lossy().to_string(),
+        url: "".to_string(),
+        position: None,
+        children: Some(children),
+        is_section: true,
+    };
+    Ok(Some(navigation))
 }
 
 // Creates a navigation entry from a markdown file.
@@ -65,30 +109,7 @@ fn create_navigation_from_file(
         position: meta_data.position,
         url: format!("/{}", relative_url),
         children: None,
-    })
-}
-
-// Creates a navigation entry for a section, including navigation entries for its files.
-fn create_section_navigation(section: &Section, root_path: &Path) -> Option<Navigation> {
-    let section_title = section.path.file_name()?.to_string_lossy().to_string();
-
-    let children = section
-        .files
-        .iter()
-        .filter_map(|file| {
-            if is_markdown_file(file) {
-                create_navigation_from_file(file, root_path).ok()
-            } else {
-                None
-            }
-        })
-        .collect();
-
-    Some(Navigation {
-        title: section_title,
-        position: None,
-        url: "".to_string(),
-        children: Some(children),
+        is_section: false,
     })
 }
 

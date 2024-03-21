@@ -8,8 +8,9 @@ position: 1
 ## New Features
 
 - Added nested subdirectories support for the `docs` folder. Now you can organize your documentation in a more structured way.
+- Unlimited nested subdirectories. You can create as many nested subdirectories as you want.
 
 
 ## Limitations
 
-- Only one level of subdirectories is supported. This means that you can't have a subdirectory inside another subdirectory. This is a known limitation and we are working to fix it in the next release.
+- The sections in sidebar can't have a title or position yet.
