@@ -31,7 +31,17 @@ It is also online available at [dorcs.allthing.eu](https://dorcs.allthing.eu).
 
 ### 📥 Binary
 
-Download pre-built binaries from the releases section for a quick start.
+Download pre-built binaries from the [releases section](https://github.com/Padi2312/dorcs/releases) for a quick start.
+
+#### 🧪 Experimental
+
+In  `develop` branch you can find the latest features and changes. Use with caution, there may be not working features or breaking changes.
+
+You can find the nightly builds marked as pre-releases in the [releases section](https://github.com/Padi2312/dorcs/releases)
+
+
+
+
 
 ### 🔨 Build from Source
 
