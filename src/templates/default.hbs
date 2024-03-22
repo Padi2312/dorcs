@@ -1,51 +1,49 @@
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/default.css" />
-    <title>{{page_title}}</title>
-  </head>
-  <body>
-    <div class="navbar">
-      <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div>
-      <div class="navbar-title">{{page_title}}</div>
-      <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌛</div>
-    </div>
 
-    <div class="container">
-      <aside class="sidebar">
-          {{> navigation_template navigation}}
-      </aside>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/default.css" />
+  <title>{{page_title}}</title>
+</head>
 
-      <main class="content">
-        <div class="content-container">{{{content}}}</div>
-      </main>
-    </div>
+<body>
+  <div class="navbar">
+    <div class="sidebar-toggle" onclick="toggleSidebar()">☰</div>
+    <div class="navbar-title">{{page_title}}</div>
+    <div class="dark-mode-toggle" onclick="toggleDarkMode()">🌛</div>
+  </div>
 
-    <script>
-      window.onload = function () { const darkMode =
-      sessionStorage.getItem("dark-mode"); if (darkMode === "true") {
-      document.body.classList.add("dark-mode"); } }; function toggleSidebar() {
+  <div class="container">
+    <aside class="sidebar">
+      {{> navigation_template navigation}}
+    </aside>
+
+    <main class="content">
+      <div class="content-container">{{{content}}}</div>
+    </main>
+  </div>
+
+  <script>
+    window.onload = function () {
+      const darkMode =
+        sessionStorage.getItem("dark-mode"); if (darkMode === "true") {
+          document.body.classList.add("dark-mode");
+        }
+    };
+     function toggleSidebar() {
       const sidebar = document.querySelector(".sidebar");
-      sidebar.classList.toggle("active"); } function toggleDarkMode() {
-      document.body.classList.toggle("dark-mode"); const darkModeToggle =
-      document.querySelector(".dark-mode-toggle"); const isDarkMode =
-      document.body.classList.contains("dark-mode");
-      sessionStorage.setItem("dark-mode", isDarkMode);
-      darkModeToggle.textContent = isDarkMode ? "☀️" : "🌛"; }
+      sidebar.classList.toggle("active");
+    }
     
-function toggleSubMenu(element) {
-  // Directly toggle the submenu of the clicked menu section
-  const submenu = element.nextElementSibling; // Assuming the submenu div immediately follows the title div
-  if (submenu.style.display === 'none' || submenu.style.display === '') {
-    submenu.style.display = 'block'; // Show submenu
-    element.querySelector('.arrow').style.transform = 'rotate(360deg)'; // Flip arrow upwards
-  } else {
-    submenu.style.display = 'none'; // Hide submenu
-    element.querySelector('.arrow').style.transform = ''; // Reset arrow to original state
-  }
-}
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode"); const darkModeToggle =
+        document.querySelector(".dark-mode-toggle"); const isDarkMode =
+          document.body.classList.contains("dark-mode");
+      sessionStorage.setItem("dark-mode", isDarkMode);
+      darkModeToggle.textContent = isDarkMode ? "☀️" : "🌛";
+    }
+  </script>
+</body>
 
-    </script>
-  </body>
 </html>

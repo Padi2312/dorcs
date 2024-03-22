@@ -2,10 +2,10 @@ use std::{fs, io::Write, path::PathBuf};
 
 use handlebars::Handlebars;
 use markdown::{CompileOptions, Options};
-use regex::Regex;
 use serde_json::json;
 
 use super::{
+    meta_data::MetaData,
     navigation::Navigation,
     templates::{CSS_TEMPLATE_FILE, NAVIGATION_TEMPLATE_FILE, TEMPLATE_FILE},
 };
@@ -81,7 +81,7 @@ impl<'a> SectionHandler<'a> {
     }
 
     pub fn execute(&self, out_dir: &str) {
-        println!("Root section: {:#?}", self.root_section);
+        // println!("Root section: {:#?}", self.root_section);
         let navigation_list = generate_navigation(&self.root_section, &self.root_section.path);
         if navigation_list.is_err() {
             panic!("No navigation list generated");
@@ -99,6 +99,14 @@ impl<'a> SectionHandler<'a> {
             if file.extension().unwrap() != "md" {
                 self.copy_asset_file(file, out_dir);
             } else {
+                if file.file_name().unwrap() == "index.md" {
+                    // Check if file is empty after removing meta   data
+                    let raw_content = fs::read_to_string(file).unwrap();
+                    let parsed_content = MetaData::remove_meta_data(&raw_content);
+                    if parsed_content.is_empty() {
+                        continue;
+                    }
+                }
                 self.process_md_file(file, out_dir, navigation_list);
             }
         }
@@ -126,7 +134,7 @@ impl<'a> SectionHandler<'a> {
 
     fn process_md_file(&self, file: &PathBuf, out_dir: &str, navigation_list: &Vec<Navigation>) {
         let raw_content = fs::read_to_string(file).unwrap();
-        let parsed_content = self.remove_meta_data(&raw_content);
+        let parsed_content = MetaData::remove_meta_data(&raw_content);
 
         // Process the content
         let html = self.to_html(&parsed_content);
@@ -147,12 +155,6 @@ impl<'a> SectionHandler<'a> {
         fs::create_dir_all(save_dir).unwrap();
         let mut file = fs::File::create(save_path).unwrap();
         file.write_all(html.as_bytes()).unwrap();
-    }
-
-    fn remove_meta_data(&self, content: &String) -> String {
-        let re = Regex::new(r"(?s)^---\s*(.*?)\s*---").unwrap();
-        let content = re.replace(content, "");
-        content.to_string()
     }
 
     fn to_html(&self, content: &String) -> String {

@@ -1,15 +1,6 @@
-use std::{fs, path::Path};
-
-use regex::Regex;
+use super::{meta_data::MetaData, sections::Section};
 use serde::{Deserialize, Serialize};
-
-use super::sections::Section;
-
-#[derive(Debug, Clone)]
-pub struct MetaData {
-    pub title: String,
-    pub position: Option<i32>,
-}
+use std::{fs, path::Path};
 
 #[derive(Debug, Serialize, Clone, Deserialize)]
 pub struct Navigation {
@@ -57,12 +48,29 @@ fn create_section_navigation(
     root_path: &Path,
 ) -> Result<Option<Navigation>, Box<dyn std::error::Error>> {
     let mut children = Vec::new();
-
+    let mut meta_data = MetaData {
+        title: "".to_string(),
+        position: None,
+    };
+    let mut url = "".to_string();
     // Process markdown files in the section.
     for file in &section.files {
         if is_markdown_file(file) {
-            if let Ok(navigation) = create_navigation_from_file(file, root_path) {
-                children.push(navigation);
+            if file.file_name().unwrap() == "index.md" {
+                let content = fs::read_to_string(file)?;
+                meta_data = MetaData::from_string(&content);
+                let content = MetaData::remove_meta_data(&content);
+                if !content.trim().is_empty() {
+                    url = file
+                        .with_extension("")
+                        .strip_prefix(root_path)?
+                        .to_string_lossy()
+                        .to_string();
+                }
+            } else {
+                if let Ok(navigation) = create_navigation_from_file(file, root_path) {
+                    children.push(navigation);
+                }
             }
         }
     }
@@ -77,13 +85,23 @@ fn create_section_navigation(
 
     // Sort navigation entries by their position, placing entries without a position at the end.
     children.sort_by_key(|nav| nav.position.unwrap_or(std::i32::MAX));
-    
+
+    let title = if meta_data.title.is_empty() {
+        section
+            .path
+            .file_name()
+            .unwrap()
+            .to_string_lossy()
+            .to_string()
+    } else {
+        meta_data.title
+    };
 
     // Only create a navigation entry if the section has a title.
     let navigation = Navigation {
-        title: section.path.file_name().unwrap().to_string_lossy().to_string(),
-        url: "".to_string(),
-        position: None,
+        title,
+        url,
+        position: meta_data.position,
         children: Some(children),
         is_section: true,
     };
@@ -97,7 +115,7 @@ fn create_navigation_from_file(
 ) -> Result<Navigation, Box<dyn std::error::Error>> {
     // TODO: Make this more efficient by reading the file only once. Currently we read it's content in SectionHanlder and here.
     let content = fs::read_to_string(file)?;
-    let meta_data = parse_metadata(&content);
+    let meta_data = MetaData::from_string(&content);
     let relative_url = file
         .with_extension("")
         .strip_prefix(root_path)?
@@ -116,32 +134,4 @@ fn create_navigation_from_file(
 // Checks if a file is a markdown file based on its extension.
 fn is_markdown_file(file: &Path) -> bool {
     file.extension() == Some(std::ffi::OsStr::new("md"))
-}
-
-// Parses the metadata from a markdown file.
-fn parse_metadata(raw_content: &String) -> MetaData {
-    let re = Regex::new(r"(?s)^---\s*(.*?)\s*---").unwrap();
-    let mut title = String::new();
-    let mut position: Option<i32> = None;
-
-    if let Some(cap) = re.captures_iter(raw_content.as_str()).next() {
-        let meta_str = &cap[1];
-
-        for line in meta_str.lines() {
-            let parts: Vec<&str> = line.splitn(2, ':').collect();
-            if parts.len() == 2 {
-                let key = parts[0].trim();
-                let value = parts[1].trim();
-
-                // Match the key and update the struct fields accordingly
-                match key {
-                    "title" => title = value.to_string(),
-                    "position" => position = value.parse::<i32>().ok(),
-                    _ => {} // Ignore unknown keys
-                }
-            }
-        }
-    }
-
-    MetaData { title, position }
 }
