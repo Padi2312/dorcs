@@ -9,7 +9,7 @@ position: 3
 
 - You need to have a `docs` directory where you will execute the `dorcs` command
 - Make sure all necessary markdown files **and** images used in the markdown files are present in the `docs` directory.
-- (Optional) If you want to customize the look and feel of the documentation, you can create a `dorcs.config.json` file in the root of your project. (See [Configuration](./03_configuration) for more details)
+- (Optional) If you want to customize the look and feel of the documentation, you can create a `dorcs.config.json` file in the root of your project. (See [Configuration](./04_configuration) for more details)
 
 > **NOTE:** If you link documents in the markdown files make sure to not use the `.md` extension. The links should be relative to the `docs` directory. 
 >
