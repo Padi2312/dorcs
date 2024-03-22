@@ -38,13 +38,11 @@ html,
   height: 50px;
   font-size: larger;
   color: var(--text-color);
-  margin-bottom: 2px;
-  border-bottom: 1px solid rgb(160, 160, 160);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add this line */
+  box-shadow: inset 0px -2px 1px 0px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode .navbar {
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.75);
+  box-shadow: inset 0px -2px 1px 0px rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-toggle,
@@ -73,13 +71,11 @@ html,
   overflow-y: auto;
   left: -100%;
   transition: left 0.3s ease;
-  margin-right: 2px;
-  border-right: 1px solid rgb(160, 160, 160);
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Add this line */
+  box-shadow: inset -2px 0px 1px 0px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode .sidebar {
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.75);
+  box-shadow: inset -2px 0px 1px 0px rgba(255, 255, 255, 0.1);
 }
 
 .sidebar.active {
