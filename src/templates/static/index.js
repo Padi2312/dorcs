@@ -85,9 +85,12 @@ class Router {
     const sectionTitle = document.createElement(route.url ? "a" : "div");
     sectionTitle.className = "menu-section-title";
     sectionTitle.textContent = route.title;
+    if (route.url) sectionTitle.href = route.url;
+
     sectionTitle.addEventListener("click", () => {
       this.toggleSubMenu(sectionTitle);
-      this.navigate(route.url);
+      // Only navigate if the section has a URL
+      if (route.url) this.navigate(route.url);
     });
     // Arrow for toggling the submenu
     const arrowSpan = document.createElement("span");
@@ -146,13 +149,16 @@ const handleLinkClick = (event) => {
   event.stopPropagation();
   window.history.pushState({}, "", event.target.href);
   const url = new URL(event.target.href);
-  const path = url.pathname.replace(".html", "");
-  console.log(url);
-  router.navigate(path);
+  router.navigate(url.pathname);
 };
 
 document.addEventListener("click", (event) => {
-  if (event.target.matches("a.menu-item")) {
+  if (
+    event.target.matches("a.menu-item") ||
+    (event.target.matches("a") &&
+      event.target.href.startsWith(window.location.origin)) ||
+    event.target.matches("a.menu-section-title")
+  ) {
     handleLinkClick(event);
   }
   console.log(event.target);

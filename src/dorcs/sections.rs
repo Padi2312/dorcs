@@ -1,6 +1,6 @@
-use std::{fs, io::Write, path::PathBuf};
 use markdown::{CompileOptions, Options};
 use serde_json::json;
+use std::{fs, io::Write, path::PathBuf};
 
 use super::{
     meta_data::MetaData,
@@ -129,13 +129,20 @@ impl SectionBuilder {
     }
 
     fn copy_templates_to_output(&self, out_dir: &str) {
-        let save_path = PathBuf::from(out_dir).join("index.css");
+        let save_dir = PathBuf::from(out_dir).join("static");
+        fs::create_dir_all(&save_dir).unwrap();
+
+        let save_path = &save_dir.join("index.css");
         let mut file = fs::File::create(save_path).unwrap();
         file.write_all(CSS_TEMPLATE_FILE.as_bytes()).unwrap();
 
-        let save_path = PathBuf::from(out_dir).join("index.js");
+        let save_path = &save_dir.join("index.js");
         let mut file = fs::File::create(save_path).unwrap();
         file.write_all(JS_FILE.as_bytes()).unwrap();
+
+        let save_path = &save_dir.join("favicon.ico");
+        let mut file = fs::File::create(save_path).unwrap();
+        file.write_all(super::templates::FAVICON_FILE).unwrap();
 
         let save_path = PathBuf::from(out_dir).join("index.html");
         let mut file = fs::File::create(save_path).unwrap();
