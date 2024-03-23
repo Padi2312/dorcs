@@ -1,13 +1,10 @@
 use std::{fs, io::Write, path::PathBuf};
-
-use handlebars::Handlebars;
 use markdown::{CompileOptions, Options};
 use serde_json::json;
 
 use super::{
     meta_data::MetaData,
-    navigation::Navigation,
-    templates::{CSS_TEMPLATE_FILE, NAVIGATION_TEMPLATE_FILE, TEMPLATE_FILE},
+    templates::{CSS_TEMPLATE_FILE, HTML_FILE, JS_FILE},
 };
 use crate::dorcs::navigation::generate_navigation;
 
@@ -62,22 +59,13 @@ impl SectionGenerator {
     }
 }
 
-pub struct SectionHandler<'a> {
+pub struct SectionBuilder {
     pub root_section: Section,
-    handlebars: Handlebars<'a>,
 }
 
-impl<'a> SectionHandler<'a> {
-    pub fn new(root_section: Section) -> SectionHandler<'a> {
-        let mut reg = Handlebars::new();
-        reg.register_template_string("default", TEMPLATE_FILE)
-            .unwrap();
-        reg.register_template_string("navigation_template", NAVIGATION_TEMPLATE_FILE)
-            .unwrap();
-        SectionHandler {
-            root_section,
-            handlebars: reg,
-        }
+impl SectionBuilder {
+    pub fn new(root_section: Section) -> SectionBuilder {
+        SectionBuilder { root_section }
     }
 
     pub fn execute(&self, out_dir: &str) {
@@ -87,12 +75,23 @@ impl<'a> SectionHandler<'a> {
             panic!("No navigation list generated");
         }
         let navigation_list = navigation_list.unwrap();
-        println!("Navigation list: {:#?}", navigation_list);
-        self.process(&self.root_section, out_dir, &navigation_list);
-        self.write_css_to_output(out_dir);
+        // println!("Navigation list: {:#?}", navigation_list);
+        // Write navagation list as json to routes.json in output dir
+        let save_path = PathBuf::from(&out_dir).join("routes.json");
+        let final_out_dir = PathBuf::from(&out_dir).join("pages");
+        let final_out_dir_str = final_out_dir.to_str().unwrap();
+
+        let save_dir = save_path.parent().unwrap();
+        fs::create_dir_all(save_dir).unwrap();
+        let mut file = fs::File::create(save_path).unwrap();
+        file.write_all(json!(navigation_list).to_string().as_bytes())
+            .unwrap();
+
+        self.process(&self.root_section, final_out_dir_str);
+        self.copy_templates_to_output(out_dir);
     }
 
-    fn process(&self, section: &Section, out_dir: &str, navigation_list: &Vec<Navigation>) {
+    fn process(&self, section: &Section, out_dir: &str) {
         for file in &section.files {
             // If file is .md file we process it
             // otherwise we assume it's an asset file
@@ -107,49 +106,47 @@ impl<'a> SectionHandler<'a> {
                         continue;
                     }
                 }
-                self.process_md_file(file, out_dir, navigation_list);
+                self.process_md_file(file, out_dir);
             }
         }
 
         if let Some(sections) = &section.sections {
             for section in sections {
-                self.process(section, out_dir, navigation_list);
+                self.process(section, out_dir);
             }
         }
     }
 
     fn copy_asset_file(&self, file: &PathBuf, out_dir: &str) {
         let relative_path = file.strip_prefix(&self.root_section.path).unwrap();
+        // Get parentdir from outdir due to /pages directory
+        let binding = PathBuf::from(out_dir);
+        let out_dir = binding.parent().unwrap().to_str().unwrap();
         let save_path = PathBuf::from(out_dir).join(relative_path);
         let save_dir = save_path.parent().unwrap();
         fs::create_dir_all(save_dir).unwrap();
         fs::copy(file, save_path).unwrap();
     }
 
-    fn write_css_to_output(&self, out_dir: &str) {
-        let save_path = PathBuf::from(out_dir).join("default.css");
+    fn copy_templates_to_output(&self, out_dir: &str) {
+        let save_path = PathBuf::from(out_dir).join("index.css");
         let mut file = fs::File::create(save_path).unwrap();
         file.write_all(CSS_TEMPLATE_FILE.as_bytes()).unwrap();
+
+        let save_path = PathBuf::from(out_dir).join("index.js");
+        let mut file = fs::File::create(save_path).unwrap();
+        file.write_all(JS_FILE.as_bytes()).unwrap();
+
+        let save_path = PathBuf::from(out_dir).join("index.html");
+        let mut file = fs::File::create(save_path).unwrap();
+        file.write_all(HTML_FILE.as_bytes()).unwrap();
     }
 
-    fn process_md_file(&self, file: &PathBuf, out_dir: &str, navigation_list: &Vec<Navigation>) {
+    fn process_md_file(&self, file: &PathBuf, out_dir: &str) {
         let raw_content = fs::read_to_string(file).unwrap();
         let parsed_content = MetaData::remove_meta_data(&raw_content);
 
-        // Process the content
         let html = self.to_html(&parsed_content);
-        let data = json!({
-            "content": html,
-            "page_title": "Dorcs",
-            "navigation": navigation_list,
-        });
-
-        let html = self.handlebars.render("default", &data);
-        if html.is_err() {
-            panic!("Error rendering template: {:?}", html.err());
-        }
-        let html = html.unwrap();
-
         let save_path = self.get_save_path(file, &out_dir);
         let save_dir = save_path.parent().unwrap();
         fs::create_dir_all(save_dir).unwrap();

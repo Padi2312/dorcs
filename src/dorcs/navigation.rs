@@ -1,6 +1,7 @@
 use super::{meta_data::MetaData, sections::Section};
 use serde::{Deserialize, Serialize};
-use std::{fs, path::Path};
+use std::fs;
+use std::path::PathBuf;
 
 #[derive(Debug, Serialize, Clone, Deserialize)]
 pub struct Navigation {
@@ -14,7 +15,7 @@ pub struct Navigation {
 // Generates a navigation structure from a given section.
 pub fn generate_navigation(
     section: &Section,
-    root_path: &Path,
+    root_path: &PathBuf,
 ) -> Result<Vec<Navigation>, Box<dyn std::error::Error>> {
     let mut navigation_list = Vec::new();
 
@@ -45,7 +46,7 @@ pub fn generate_navigation(
 // Creates a navigation entry for a given section.
 fn create_section_navigation(
     section: &Section,
-    root_path: &Path,
+    root_path: &PathBuf,
 ) -> Result<Option<Navigation>, Box<dyn std::error::Error>> {
     let mut children = Vec::new();
     let mut meta_data = MetaData {
@@ -66,6 +67,8 @@ fn create_section_navigation(
                         .strip_prefix(root_path)?
                         .to_string_lossy()
                         .to_string();
+                    url = url.replace("\\", "/");
+                    url = format!("/{}", url);
                 }
             } else {
                 if let Ok(navigation) = create_navigation_from_file(file, root_path) {
@@ -110,8 +113,8 @@ fn create_section_navigation(
 
 // Creates a navigation entry from a markdown file.
 fn create_navigation_from_file(
-    file: &Path,
-    root_path: &Path,
+    file: &PathBuf,
+    root_path: &PathBuf,
 ) -> Result<Navigation, Box<dyn std::error::Error>> {
     // TODO: Make this more efficient by reading the file only once. Currently we read it's content in SectionHanlder and here.
     let content = fs::read_to_string(file)?;
@@ -121,7 +124,7 @@ fn create_navigation_from_file(
         .strip_prefix(root_path)?
         .to_string_lossy()
         .to_string();
-
+    let relative_url = relative_url.replace("\\", "/");
     Ok(Navigation {
         title: meta_data.title,
         position: meta_data.position,
@@ -132,6 +135,6 @@ fn create_navigation_from_file(
 }
 
 // Checks if a file is a markdown file based on its extension.
-fn is_markdown_file(file: &Path) -> bool {
+fn is_markdown_file(file: &PathBuf) -> bool {
     file.extension() == Some(std::ffi::OsStr::new("md"))
 }

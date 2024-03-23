@@ -88,6 +88,7 @@ html,
   padding-left: 10px;
   display: block;
   border-radius: var(--border-radius);
+  z-index: 10;
 }
 
 .menu-item:hover {
@@ -104,6 +105,7 @@ html,
 .menu-section-title .arrow {
   float: right;
   transform: rotate(90deg);
+  z-index: 1;
 }
 
 .content {
@@ -250,3 +252,4 @@ a:hover {
     padding: 60px 25%;
   }
 }
+

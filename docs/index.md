@@ -34,7 +34,7 @@ It's currently in development and get more features in the future. For now it's 
 - ✅ Sidebar navigation with automatic links
 - ✅ Page metadata like title and position in the sidebar
 - ✅ Support for images and media files
-- [ ] Nested sidebar navigation for subpages
+- ✅ Nested sidebar navigation for subpages
 - [ ] Customizable templates
 - [ ] Syntax highlighting for code blocks
 - [ ] Search functionality

@@ -1,7 +1,7 @@
 [package]
 name = "dorcs"
 description = "Dorcs is a static site generator"
-version = "0.3.0-alpha.2"
+version = "0.3.0-alpha.3"
 edition = "2021"
 authors = ["Patrick Arndt <patrick.arndt.99@web.de>"]
 
@@ -10,7 +10,6 @@ name = "dorcs"         # Name of the binary
 path = "./src/main.rs" # Path to the source file
 
 [dependencies]
-handlebars = "5.1.0"
 markdown = "=1.0.0-alpha.16"
 regex = "1.10.3"
 serde = { version = "1.0.197", features = ["derive"] }
