@@ -55,6 +55,10 @@
     @apply pl-2 py-2  block rounded-lg;
   }
 
+  .menu-section a {
+    @apply text-gray-700 dark:text-gray-200;
+  }
+
   .menu-section-title {
     @apply p-2 rounded-lg flex justify-between space-x-4 font-bold;
   }

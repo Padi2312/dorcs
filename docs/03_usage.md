@@ -7,21 +7,23 @@ position: 3
 
 ## Prerequisites
 
-- You need to have a `docs` directory where you will execute the `dorcs` command
-- Make sure all necessary markdown files **and** images used in the markdown files are present in the `docs` directory.
-- (Optional) If you want to customize the look and feel of the documentation, you can create a `dorcs.config.json` file in the root of your project. (See [Configuration](./04_configuration) for more details)
+Before generating documentation, make sure you have the following:
 
-> **NOTE:** If you link documents in the markdown files make sure to not use the `.md` extension. The links should be relative to the `docs` directory. 
->
-> 
-> For example: `/another_markdown_file` instead of `/another_markdown_file.md`
+- A `docs` directory where you will execute the `dorcs` 
+- **(Optional)** A `dorcs.config.json` file in the root of your project to customize the documentation's look and feel (See [Configuration](./04_configuration) for more details)
+
+## Writing the documentation
+
+- To write documentation, create markdown files (`.md`) in the `docs` directory. 
+- Make sure to include all necessary media files in `docs` directory or subdirectories.
+
+> **NOTE:** You must have a `docs/index.md` file as the entry point for the documentation. Otherwise there will be a blank page.
+
+> **NOTE:** When linking documents in the markdown files, avoid using the `.md` extension. The links should be relative to the `docs` directory. For example, use `/another_markdown_file` instead of `/another_markdown_file.md`
 
 ## Generating Documentation
+To generate documentation, run the following command in your project's documentation folder:
 
-To generate documentation, run the following command in your project with the documentation folder:
-
-```sh
+```bash
 dorcs
 ```
-
-This will generate the documentation in the `output` directory or at the location specified in the `output` property of the `dorcs.config.json` file.

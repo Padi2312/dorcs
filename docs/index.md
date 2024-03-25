@@ -35,6 +35,7 @@ It's currently in development and get more features in the future. For now it's 
 - ✅ Page metadata like title and position in the sidebar
 - ✅ Support for images and media files
 - ✅ Nested sidebar navigation for subpages
+- ✅ Responsive design + nice ui + dark mode
 - [ ] Customizable templates
 - [ ] Syntax highlighting for code blocks
 - [ ] Search functionality

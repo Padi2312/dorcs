@@ -17,10 +17,19 @@
     init();
     sidebarVisible = !checkMobileDevice();
     window.addEventListener("click", handleClick);
+    window.addEventListener("popstate", onBackNavigation);
+
     return () => {
       window.removeEventListener("click", handleClick);
+      window.removeEventListener("popstate", onBackNavigation);
     };
   });
+
+  const onBackNavigation = (ev: PopStateEvent) => {
+    // console.log(ev);
+    // ev.preventDefault();
+    router.navigate(window.location.pathname);
+  };
 
   const checkMobileDevice = () => {
     return window.innerWidth < 768;
