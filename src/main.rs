@@ -23,6 +23,6 @@ fn main() {
     let end_time = Instant::now();
     let elapsed_time = end_time - start_time;
 
-    println!("✅ Build complete in {:?}!", elapsed_time);
+    println!("✅ Build complete in {:.2?}!", elapsed_time);
     println!("📄 Your documentation is available in: {}", output_dir);
 }

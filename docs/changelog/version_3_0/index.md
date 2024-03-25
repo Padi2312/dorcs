@@ -1,15 +1,20 @@
 ---
 title: Version 0.3.0
-position: 1
+position: 0
 ---
 
 # Version 0.3.0
 
-**NOTE:** Version 0.3.0 is still in development and may introduce breaking changes in the future. Use with caution.
+- Full support for nested sections in the sidebar. 🎉
+- The frontend is now built with Svelte. No need to install Node.js, as it is still a single binary.🌟
+- Tables are now fully responsive.📱
+- Some small UI improvements and changes.🎨
 
-> Get the current nightly build [here](https://github.com/Padi2312/dorcs/releases/tag/0.3.0-alpha.3) \
-> For more information see [Version 0.3.0 (Alpha 3)](./changelog/version_3_0/02_v_0_3_0_alpha_3)
+---
 
-## New Features
 
-- Full support for nested sections in the sidebar.
+> The previous alpha versions of version 0.3.0 are still available in the [releases](https://github.com/padi2312/dorcs/releases) marked with `pre-release`.
+> I don't recommend using them, as they are not stable and have some issues. 
+
+
+**Note:** This release is a major rewrite of the frontend. If you encounter any issues, please report them on the [GitHub repository](https://github.com/padi2312/dorcs/issues).

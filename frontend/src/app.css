@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#app {
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  display: block;
+}
+
+main {
+  word-break: break-word;
+  max-width: 100%;
+}
+
+h1 {
+  @apply text-4xl font-bold my-4;
+}
+
+h2 {
+  @apply text-3xl font-semibold my-4;
+}
+
+h3 {
+  @apply text-2xl font-medium my-4;
+}
+
+h4 {
+  @apply text-xl font-medium my-4;
+}
+
+h5 {
+  @apply text-lg font-normal my-4;
+}
+
+h6 {
+  @apply text-base font-normal my-4;
+}
+
+pre {
+  @apply bg-gray-100 dark:bg-gray-700 p-4 rounded-md border-l-4 border-gray-500 my-4 w-full;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: auto;
+  word-wrap: normal;
+  white-space: pre;
+}
+
+code {
+  @apply text-gray-800 dark:text-gray-100;
+}
+
+p {
+  @apply my-4;
+}
+
+ul {
+  @apply my-4
+}
+
+li {
+  @apply list-disc ml-4;
+}
+
+hr {
+  @apply my-4 border-t border-gray-200 dark:border-gray-600;
+}
+
+table {
+  @apply divide-y divide-gray-200 dark:divide-gray-600 my-4 w-full block overflow-auto;
+}
+
+thead {
+  @apply bg-gray-50 dark:bg-gray-800 w-full;
+}
+
+th {
+  @apply px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-400 uppercase tracking-wider;
+}
+
+tbody {
+  @apply bg-white dark:bg-gray-900;
+  white-space: pre;
+}
+
+tr {
+  @apply transition duration-150 ease-in-out;
+}
+
+td {
+  @apply px-6 py-4 text-sm text-gray-900 dark:text-white;
+}
+
+tr:hover {
+  @apply bg-gray-100 dark:bg-gray-700;
+}

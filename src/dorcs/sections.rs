@@ -2,10 +2,7 @@ use markdown::{CompileOptions, Options};
 use serde_json::json;
 use std::{fs, io::Write, path::PathBuf};
 
-use super::{
-    meta_data::MetaData,
-    templates::{CSS_TEMPLATE_FILE, HTML_FILE, JS_FILE},
-};
+use super::{meta_data::MetaData, templates::Asset};
 use crate::dorcs::navigation::generate_navigation;
 
 #[derive(Debug)]
@@ -75,8 +72,6 @@ impl SectionBuilder {
             panic!("No navigation list generated");
         }
         let navigation_list = navigation_list.unwrap();
-        // println!("Navigation list: {:#?}", navigation_list);
-        // Write navagation list as json to routes.json in output dir
         let save_path = PathBuf::from(&out_dir).join("routes.json");
         let final_out_dir = PathBuf::from(&out_dir).join("pages");
         let final_out_dir_str = final_out_dir.to_str().unwrap();
@@ -119,8 +114,8 @@ impl SectionBuilder {
 
     fn copy_asset_file(&self, file: &PathBuf, out_dir: &str) {
         let relative_path = file.strip_prefix(&self.root_section.path).unwrap();
-        // Get parentdir from outdir due to /pages directory
         let binding = PathBuf::from(out_dir);
+        // Get parentdir from outdir due to /pages directory url used in frontend routing
         let out_dir = binding.parent().unwrap().to_str().unwrap();
         let save_path = PathBuf::from(out_dir).join(relative_path);
         let save_dir = save_path.parent().unwrap();
@@ -129,24 +124,20 @@ impl SectionBuilder {
     }
 
     fn copy_templates_to_output(&self, out_dir: &str) {
-        let save_dir = PathBuf::from(out_dir).join("static");
-        fs::create_dir_all(&save_dir).unwrap();
+        for file in Asset::iter() {
+            let asset_file = Asset::get(&file);
+            if asset_file.is_none() {
+                panic!("No data found for file: {:?}", file);
+            }
+            let asset_file = asset_file.unwrap();
+            let data = asset_file.data.as_ref();
 
-        let save_path = &save_dir.join("index.css");
-        let mut file = fs::File::create(save_path).unwrap();
-        file.write_all(CSS_TEMPLATE_FILE.as_bytes()).unwrap();
-
-        let save_path = &save_dir.join("index.js");
-        let mut file = fs::File::create(save_path).unwrap();
-        file.write_all(JS_FILE.as_bytes()).unwrap();
-
-        let save_path = &save_dir.join("favicon.ico");
-        let mut file = fs::File::create(save_path).unwrap();
-        file.write_all(super::templates::FAVICON_FILE).unwrap();
-
-        let save_path = PathBuf::from(out_dir).join("index.html");
-        let mut file = fs::File::create(save_path).unwrap();
-        file.write_all(HTML_FILE.as_bytes()).unwrap();
+            let asset_path = PathBuf::from(file.as_ref());
+            let save_path = PathBuf::from(out_dir).join(asset_path);
+            fs::create_dir_all(&save_path.parent().unwrap()).unwrap();
+            let mut file = fs::File::create(save_path).unwrap();
+            file.write_all(data).unwrap();
+        }
     }
 
     fn process_md_file(&self, file: &PathBuf, out_dir: &str) {
