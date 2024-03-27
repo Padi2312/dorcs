@@ -1,3 +1,7 @@
 {
-    "page_title": "Dorcs Documentation"
+    "$schema": "./json-schema/dorcs.config.schema.json",
+    "page_settings": {
+        "icon": "dorcs_logo.png",
+        "page_title": "Dorcs"
+    }
 }

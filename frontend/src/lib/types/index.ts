@@ -5,3 +5,9 @@ export type Route = {
     title: string;
     url: string;
 };
+
+export type PageSettings = {
+    page_title: string
+    icon: string
+    landing_page: string
+}

@@ -12,5 +12,4 @@ pub struct ConfigJsonSchema {
 pub struct PageSettingsJsonSchema {
     pub page_title: Option<String>,
     pub icon: Option<String>,
-    pub landing_page: Option<String>,
 }

@@ -6,6 +6,8 @@
   import Navbar from "./lib/components/Navbar.svelte";
   import Sidebar from "./lib/components/Sidebar.svelte";
   import type { Route } from "./lib/types";
+  import { fetchPageSettings } from "./lib/settingsStore";
+
   const router: Router = new Router();
   const contentLoader = new ContentLoader();
 
@@ -14,6 +16,7 @@
   let sidebarVisible = true;
 
   onMount(() => {
+    fetchPageSettings();
     init();
     sidebarVisible = !checkMobileDevice();
     window.addEventListener("click", handleClick);
@@ -26,8 +29,6 @@
   });
 
   const onBackNavigation = (ev: PopStateEvent) => {
-    // console.log(ev);
-    // ev.preventDefault();
     router.navigate(window.location.pathname);
   };
 
@@ -81,9 +82,9 @@
 
 <div class="text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-800 h-full">
   <Navbar on:sidebarToggle={handleSidebarToggle} />
-  <div class="flex h-full">
+  <div class="flex">
     <Sidebar {routes} bind:visible={sidebarVisible} />
-    <div class="w-full flex justify-center relative max-w-full">
+    <div class="w-full flex justify-center max-w-full">
       <Content {content} />
     </div>
   </div>

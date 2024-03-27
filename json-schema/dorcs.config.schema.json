@@ -36,12 +36,6 @@
             "null"
           ]
         },
-        "landing_page": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
         "page_title": {
           "type": [
             "string",

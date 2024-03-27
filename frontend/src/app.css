@@ -10,11 +10,13 @@ body,
   padding: 0;
   margin: 0;
   display: block;
+  @apply text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-800
 }
 
 main {
   word-break: break-word;
   max-width: 100%;
+  @apply text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-800
 }
 
 h1 {

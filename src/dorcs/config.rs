@@ -25,7 +25,7 @@ impl Config {
         Config {
             source: "docs".to_string(),
             output: "output".to_string(),
-            page_settings: PageSettings::load(),
+            page_settings: PageSettings::load(None),
         }
     }
 
@@ -35,10 +35,19 @@ impl Config {
         let source = config_schema.source.unwrap_or("docs".to_string());
         let output = config_schema.output.unwrap_or("output".to_string());
 
+        let page_settings_json = config_schema.page_settings;
+        if page_settings_json.is_none() {
+            return Config {
+                source,
+                output,
+                page_settings: PageSettings::load(None),
+            };
+        }
+        let page_settings_json = page_settings_json.unwrap();
         Config {
             source,
             output,
-            page_settings: PageSettings::load(),
+            page_settings: PageSettings::load(Some(page_settings_json)),
         }
     }
 }
