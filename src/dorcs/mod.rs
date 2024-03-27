@@ -5,3 +5,4 @@ mod navigation;
 pub mod page_settings;
 mod sections;
 mod templates;
+pub mod wizard;
