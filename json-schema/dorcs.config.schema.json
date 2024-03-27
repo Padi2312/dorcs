@@ -1,0 +1,54 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ConfigJsonSchema",
+  "type": "object",
+  "properties": {
+    "output": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "page_settings": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/PageSettingsJsonSchema"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "page_title": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "definitions": {
+    "PageSettingsJsonSchema": {
+      "type": "object",
+      "properties": {
+        "icon": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "landing_page": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  }
+}
