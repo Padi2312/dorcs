@@ -11,7 +11,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/pages': 'http://127.0.0.1:8080/',
-      '/routes.json': 'http://localhost:8080',,
+      '/routes.json': 'http://localhost:8080',
       '/page_settings.json': 'http://localhost:8080',
     },
   },
