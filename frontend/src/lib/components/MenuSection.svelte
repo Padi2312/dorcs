@@ -52,7 +52,7 @@
 
 <style>
   .menu-section {
-    @apply pl-2 py-2  block rounded-lg;
+    @apply py-2  block rounded-lg;
   }
 
   .menu-section a {
@@ -60,7 +60,7 @@
   }
 
   .menu-section-title {
-    @apply p-2 rounded-lg flex justify-between space-x-4 font-bold;
+    @apply p-2 rounded-lg flex justify-between space-x-4 font-bold items-center;
   }
 
   .menu-section-title:hover {

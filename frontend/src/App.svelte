@@ -76,13 +76,12 @@
 
   function handleSidebarToggle() {
     sidebarVisible = !sidebarVisible;
-    console.log("Sidebar toggle", sidebarVisible);
   }
 </script>
 
 <div class="text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-800 h-full">
   <Navbar on:sidebarToggle={handleSidebarToggle} />
-  <div class="flex">
+  <div class="flex h-full">
     <Sidebar {routes} bind:visible={sidebarVisible} />
     <div class="w-full flex justify-center relative max-w-full">
       <Content {content} />
