@@ -19,12 +19,6 @@
         }
       ]
     },
-    "page_title": {
-      "type": [
-        "string",
-        "null"
-      ]
-    },
     "source": {
       "type": [
         "string",
@@ -43,6 +37,12 @@
           ]
         },
         "landing_page": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "page_title": {
           "type": [
             "string",
             "null"

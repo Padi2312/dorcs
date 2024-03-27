@@ -1,16 +1,11 @@
 use std::path::Path;
 
-use schemars::JsonSchema;
+use dorcs_json_schema::PageSettingsJsonSchema;
 use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Serialize, Clone, Deserialize, JsonSchema)]
-pub struct PageSettingsJsonSchema {
-    pub icon: Option<String>,
-    pub landing_page: Option<String>,
-}
 
 #[derive(Debug, Serialize, Clone, Deserialize)]
 pub struct PageSettings {
+    pub page_title: String,
     pub icon: String,
     pub landing_page: String,
 }
@@ -32,14 +27,20 @@ impl PageSettings {
     fn from_file(file_path: &str) -> PageSettings {
         let content = std::fs::read_to_string(file_path).unwrap();
         let data: PageSettingsJsonSchema = serde_json::from_str(&content).unwrap();
+        let page_title = data.page_title.unwrap_or("Documentation".to_string());
         let icon = data.icon.unwrap_or("".to_string());
         let landing_page = data.landing_page.unwrap_or("index.md".to_string());
 
-        PageSettings { icon, landing_page }
+        PageSettings {
+            page_title,
+            icon,
+            landing_page,
+        }
     }
 
     fn default() -> PageSettings {
         PageSettings {
+            page_title: "Documentation".to_string(),
             icon: "".to_string(),
             landing_page: "index.md".to_string(),
         }
