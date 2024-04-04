@@ -120,7 +120,8 @@ fn main() {
         builder.process_file(file);
     }
 
-    println!("{:#?}", &builder.tree.get_root_node());
+    // println!("{:#?}", &builder.tree.get_root_node());
+    builder.generate_navigation();
     // Get paths in root dir
 
 }

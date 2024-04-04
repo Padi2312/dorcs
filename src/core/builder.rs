@@ -4,7 +4,12 @@ use std::{
     path::Path,
 };
 
-use super::{dorcs_file::DorcsFile, navigation_tree::NavigationTree};
+use serde_json::json;
+
+use super::{
+    dorcs_file::DorcsFile,
+    navigation_tree::{NavigationTree, SerializableNavigationNode},
+};
 
 pub struct Builder {
     pub tree: NavigationTree,
@@ -44,12 +49,15 @@ impl Builder {
 
     pub fn generate_navigation(&mut self) {
         let root_node = self.tree.get_root_node();
-        let children = root_node.borrow_mut().children.sort_by_key(|node| node.borrow().position);
+        let root_node = root_node.borrow().clone();
+        let serialize_root = SerializableNavigationNode::from_navigation_node(&root_node);
+        let children = serialize_root.children.clone();
 
         let save_path = Path::new(&self.out_dir).join("routes.json");
         let save_dir = save_path.parent().unwrap();
         fs::create_dir_all(save_dir).unwrap();
         let mut file = File::create(save_path).unwrap();
-        // file.write_all(json!(children).to_string().as_bytes()).unwrap();
+        file.write_all(json!(children).to_string().as_bytes())
+            .unwrap();
     }
 }
