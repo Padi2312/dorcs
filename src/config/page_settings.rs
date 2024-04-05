@@ -24,10 +24,7 @@ impl PageSettings {
             "".to_string()
         };
 
-        PageSettings {
-            page_title,
-            icon,
-        }
+        PageSettings { page_title, icon }
     }
 
     pub fn to_json(&self) -> String {

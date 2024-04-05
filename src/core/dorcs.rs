@@ -1,17 +1,11 @@
+use super::{dorcs_file::DorcsFile, embedded::Asset, file_handler::FileHandler, wizard};
+use crate::config::config::Config;
+use crate::navigation::{node::SerializableNavigationNode, tree::NavigationTree};
+use serde_json::json;
 use std::{
     fs::{self, File},
     io::Write,
     path::{Path, PathBuf},
-};
-
-use serde_json::json;
-
-use super::{
-    config::config::Config,
-    dorcs_file::DorcsFile,
-    embedded::Asset,
-    file_handler::FileHandler,
-    navigation_tree::{NavigationTree, SerializableNavigationNode},
 };
 
 pub struct Dorcs {
@@ -33,6 +27,8 @@ impl Dorcs {
     }
 
     pub fn init(&mut self) {
+        wizard::setup();
+
         self.write_files();
         self.copy_assets();
         self.write_navigation();
