@@ -1,7 +1,7 @@
 [package]
 name = "dorcs"
 description = "Dorcs is a static site generator"
-version = "0.4.0"
+version = "0.4.0-alpha.1"
 edition = "2021"
 authors = ["Patrick Arndt <patrick.arndt.99@web.de>"]
 build = "build.rs"
