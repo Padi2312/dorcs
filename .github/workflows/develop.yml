@@ -1,9 +1,5 @@
 name: Pre-release dorcs 
-on:
-  push:
-    branches:
-      - develop
-
+on: workflow_dispatch
 jobs:
   build-and-upload:
     name: Build and upload
