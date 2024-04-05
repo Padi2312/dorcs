@@ -64,18 +64,23 @@ impl Serialize for NavigationNode {
 }
 
 impl NavigationNode {
-    fn new(path: &str, url: String, title: &str, position: isize) -> Rc<RefCell<Self>> {
+    fn new(path: &str, url: &str, title: &str, position: isize) -> Rc<RefCell<Self>> {
         Rc::new(RefCell::new(NavigationNode {
             path: path.to_string(),
             title: title.to_string(),
             children: Vec::new(),
             position: position,
+            // `prepare_url` already adds the leading slash
             url: NavigationNode::prepare_url(url),
         }))
     }
 
-    fn prepare_url(path: String) -> String {
-        let url = format!("/{}", path);
+    fn set_url(&mut self, url: &str) {
+        self.url = NavigationNode::prepare_url(url);
+    }
+
+    fn prepare_url(path: &str) -> String {
+        let url = format!("pages/{}", path);
         let url = url.replace(".md", ".html");
         let url = url.replace("\\", "/");
         url
@@ -98,9 +103,8 @@ pub struct NavigationTree {
 }
 
 impl NavigationTree {
-    pub fn new(root_dir: &String) -> NavigationTree {
-        let root_node =
-            NavigationNode::new(&root_dir.as_str(), root_dir.clone(), &root_dir.as_str(), 0);
+    pub fn new(root_dir: &str) -> NavigationTree {
+        let root_node = NavigationNode::new(&root_dir, &root_dir, &root_dir, 0);
         NavigationTree {
             root_dir: root_dir.to_string(),
             root_node,
@@ -136,7 +140,7 @@ impl NavigationTree {
             } else {
                 let new_node = NavigationNode::new(
                     component_str,
-                    file.path.to_str().unwrap().to_string(),
+                    file.path.to_str().unwrap_or(""),
                     file.meta_data.title.as_str(),
                     file.meta_data.position.unwrap_or(isize::MAX),
                 );
@@ -168,7 +172,7 @@ impl NavigationTree {
                 current_node.borrow_mut().title = file.meta_data.title.clone();
                 current_node.borrow_mut().position = file.meta_data.position.unwrap_or(9001);
                 current_node.borrow_mut().url =
-                    NavigationNode::prepare_url(file.path.to_str().unwrap().to_string());
+                    NavigationNode::prepare_url(file.path.to_str().unwrap_or(""));
                 return;
             }
 

@@ -38,7 +38,7 @@
   {#if open && route.children}
     <div class="submenu">
       {#each route.children as child}
-        {#if child.is_section}
+        {#if child.children}
           <svelte:self route={child} />
         {:else}
           <a class="menu-section-title" href={child.url} on:click>
