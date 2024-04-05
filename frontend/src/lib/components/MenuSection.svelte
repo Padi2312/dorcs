@@ -14,8 +14,8 @@
 
 <div class="menu-section">
   <div class="menu-section-title">
-    {#if route.url}
-      <a class="flex-1" href={route.url}>
+    {#if route.url.length !== 0}
+      <a class="flex-1" href={route.url.replace("pages/", "/")}>
         {route.title}
       </a>
     {:else}
@@ -24,7 +24,7 @@
       >
     {/if}
 
-    {#if route.children}
+    {#if route.children?.length !== 0}
       <button class="hover:bg-gray-300 rounded-md p-1" on:click={toggleOpen}>
         {#if open}
           <IconChevronDown />
@@ -38,10 +38,14 @@
   {#if open && route.children}
     <div class="submenu">
       {#each route.children as child}
-        {#if child.is_section}
+        {#if child.children?.length !== 0}
           <svelte:self route={child} />
         {:else}
-          <a class="menu-section-title" href={child.url} on:click>
+          <a
+            class="menu-section-title"
+            href={child.url.replace("pages/", "/")}
+            on:click
+          >
             {child.title}
           </a>
         {/if}
@@ -56,7 +60,7 @@
   }
 
   .menu-section a {
-    @apply text-gray-700 dark:text-gray-200;
+    @apply text-textColor;
   }
 
   .menu-section-title {
@@ -64,7 +68,7 @@
   }
 
   .menu-section-title:hover {
-    @apply bg-gray-200;
+    @apply bg-zinc-200 dark:bg-zinc-600;
   }
 
   .submenu {

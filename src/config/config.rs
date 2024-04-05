@@ -11,6 +11,16 @@ pub struct Config {
     pub page_settings: PageSettings,
 }
 
+impl Default for Config {
+    fn default() -> Self {
+        Config {
+            source: "docs".to_string(),
+            output: "output".to_string(),
+            page_settings: PageSettings::load(None),
+        }
+    }
+}
+
 impl Config {
     pub fn load() -> Config {
         let default_config_path = "dorcs.config.json";
@@ -19,14 +29,6 @@ impl Config {
             config = Config::from_file(default_config_path);
         }
         config
-    }
-
-    fn default() -> Config {
-        Config {
-            source: "docs".to_string(),
-            output: "output".to_string(),
-            page_settings: PageSettings::load(None),
-        }
     }
 
     fn from_file(file_path: &str) -> Config {

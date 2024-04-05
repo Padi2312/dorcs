@@ -104,7 +104,7 @@ fn write_dorcs_config(source_dir: &str) {
         "$schema": "https://dorcs.allthing.eu/dorcs.config.schema.json",
         "source": source_dir
     });
-    let result = serde_json::to_writer_pretty(
+    let _= serde_json::to_writer_pretty(
         fs::File::create("dorcs.config.json").expect("Failed to create Dorcs config file"),
         &config,
     )

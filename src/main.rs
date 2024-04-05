@@ -1,9 +1,9 @@
-mod dorcs;
+pub mod config;
+mod core;
+pub mod navigation;
 
-use dorcs::{dorcser::Dorcser, wizard};
+use core::dorcs::Dorcs;
 
 fn main() {
-    wizard::setup();
-    let dorcser = Dorcser::new();
-    dorcser.build();
+    Dorcs::new().init();
 }

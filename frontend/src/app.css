@@ -2,6 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --color-background: #f9fafb;
+    --color-text: #1a202c;
+    --color-table-body: #f5f5f5;
+    --color-table-header: #d7d7d7;
+    --color-code-background: var(--color-table-body);
+  }
+
+  :root[class~="dark"] {
+    --color-background: #222;
+    --color-text: #e1e1e1;
+    --color-table-body: #2d2d2d;
+    --color-table-header: #1d1d1d;
+    --color-code-background: var(--color-table-body);
+  }
+}
+
 html,
 body,
 #app {
@@ -10,13 +28,14 @@ body,
   padding: 0;
   margin: 0;
   display: block;
-  @apply text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-800
+  /* @apply bg-background; */
+  /* @apply text-textColor bg-white dark:bg-zinc-800 */
 }
 
 main {
   word-break: break-word;
   max-width: 100%;
-  @apply text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-800
+  /* @apply bg-white dark:bg-zinc-800 */
 }
 
 h1 {
@@ -44,7 +63,7 @@ h6 {
 }
 
 pre {
-  @apply bg-gray-100 dark:bg-gray-700 p-4 rounded-md border-l-4 border-gray-500 my-4 w-full;
+  @apply bg-code-background p-4 rounded-md border-l-4 border-gray-500 my-4 w-full;
   width: 100%;
   max-width: 100vw;
   overflow-x: auto;
@@ -52,9 +71,9 @@ pre {
   white-space: pre;
 }
 
-code {
+/* code {
   @apply text-gray-800 dark:text-gray-100;
-}
+} */
 
 p {
   @apply my-4;
@@ -73,19 +92,20 @@ hr {
 }
 
 table {
-  @apply divide-y divide-gray-200 dark:divide-gray-600 my-4 w-full block overflow-auto;
+  @apply divide-y divide-gray-200 dark:divide-gray-600 my-4 w-full block overflow-auto rounded-lg;
 }
 
 thead {
-  @apply bg-gray-50 dark:bg-gray-800 w-full;
+  @apply bg-table-header w-full;
 }
 
 th {
-  @apply px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-400 uppercase tracking-wider;
+  @apply px-6 py-3 text-left text-xs font-medium uppercase tracking-wider;
 }
 
 tbody {
-  @apply bg-white dark:bg-gray-900;
+  /* @apply bg-white dark:bg-gray-900; */
+  @apply bg-table-body;
   white-space: pre;
 }
 
@@ -94,7 +114,7 @@ tr {
 }
 
 td {
-  @apply px-6 py-4 text-sm text-gray-900 dark:text-white;
+  @apply px-6 py-4 text-sm;
 }
 
 tr:hover {

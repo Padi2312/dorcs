@@ -40,7 +40,7 @@
     await router.init(onRouteChange);
     routes = router.getRoutes();
     if (window.location.pathname === "/") {
-      window.history.pushState({}, "", "/index");
+      window.history.pushState({}, "", "/index.html");
     }
     router.navigate(window.location.pathname);
   };
@@ -80,9 +80,9 @@
   }
 </script>
 
-<div class="text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-800 h-full">
+<div class="text-textColor bg-background h-full">
   <Navbar on:sidebarToggle={handleSidebarToggle} />
-  <div class="flex">
+  <div class="flex bg-inherit">
     <Sidebar {routes} bind:visible={sidebarVisible} />
     <div class="w-full flex justify-center max-w-full">
       <Content {content} />

@@ -6,7 +6,9 @@ export class ContentLoader {
 
     fetchContent(url: string) {
         if (!this.cache.has(url)) {
-            const correctedUrl = new URL(`/pages${url}.html`, window.location.href).toString();
+            // Get domain wihtout paths
+            const domain = window.location.origin;
+            const correctedUrl = new URL(url, domain).toString();
             const contentPromise = fetch(correctedUrl).then((response) => response.text());
             this.cache.set(url, contentPromise);
         }
