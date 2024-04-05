@@ -2,7 +2,7 @@
   export let content: string = "";
 </script>
 
-<main class="flex md:p-10 p-4 bg-white dark:bg-zinc-800">
+<main class="flex md:p-10 p-4">
   <div
     class="content-container lg:max-w-screen-lg md:max-w-screen-md sm:max-w-none"
   >

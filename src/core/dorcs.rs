@@ -36,6 +36,7 @@ impl Dorcs {
         self.write_files();
         self.copy_assets();
         self.write_navigation();
+        self.write_page_settings();
         self.write_frontend_files();
     }
 
@@ -103,7 +104,7 @@ impl Dorcs {
         }
     }
 
-    pub fn write_navigation(&mut self) {
+    fn write_navigation(&mut self) {
         let root_node = self.navigation_tree.get_root_node();
         let root_node = root_node.borrow().clone();
         let serialize_root = SerializableNavigationNode::from_navigation_node(&root_node);
@@ -115,6 +116,12 @@ impl Dorcs {
         let mut file = File::create(save_path).unwrap();
         file.write_all(json!(children).to_string().as_bytes())
             .unwrap();
+    }
+
+    fn write_page_settings(&self) {
+        let page_settings = self.config.page_settings.to_json();
+        let page_settings_path = format!("{}/page_settings.json", self.config.output);
+        std::fs::write(page_settings_path, page_settings).unwrap();
     }
 
     pub fn serve(&self) {

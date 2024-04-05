@@ -76,6 +76,10 @@ impl NavigationNode {
     }
 
     fn set_url(&mut self, url: &str) {
+        if url.is_empty() {
+            self.url = "".to_string();
+            return;
+        }
         self.url = NavigationNode::prepare_url(url);
     }
 
@@ -138,9 +142,15 @@ impl NavigationTree {
             if maybe_child.is_some() {
                 current_node = maybe_child.unwrap();
             } else {
+                let file_path = &file.path.clone();
+                let file_path = file_path.strip_prefix(&self.root_dir);
+                let url_path = match file_path {
+                    Ok(path) => path.to_str().unwrap_or(""),
+                    Err(_) => "",
+                };
                 let new_node = NavigationNode::new(
                     component_str,
-                    file.path.to_str().unwrap_or(""),
+                    url_path,
                     file.meta_data.title.as_str(),
                     file.meta_data.position.unwrap_or(isize::MAX),
                 );
@@ -171,8 +181,17 @@ impl NavigationTree {
             {
                 current_node.borrow_mut().title = file.meta_data.title.clone();
                 current_node.borrow_mut().position = file.meta_data.position.unwrap_or(9001);
-                current_node.borrow_mut().url =
-                    NavigationNode::prepare_url(file.path.to_str().unwrap_or(""));
+                let file_path = &file.path.clone();
+                let file_path = file_path.strip_prefix(&self.root_dir);
+                let url_path = match file_path {
+                    Ok(path) => path.to_str().unwrap_or(""),
+                    Err(_) => "",
+                };
+                if !file.content.is_empty() {
+                    current_node.borrow_mut().set_url(url_path);
+                } else {
+                    current_node.borrow_mut().set_url("");
+                }
                 return;
             }
 

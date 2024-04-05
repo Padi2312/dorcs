@@ -1,32 +1,16 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
   import { pageSettings } from "../settingsStore";
+  import DarkModeToggle from "./DarkModeToggle.svelte";
 
-  let darkMode = false;
   const dispatch = createEventDispatcher();
 
   function handleSidebarToggle() {
     dispatch("sidebarToggle");
   }
-
-  function handleDarkModeToggle() {
-    darkMode = !darkMode;
-    localStorage.setItem("theme", darkMode ? "dark" : "light");
-    darkMode
-      ? document.documentElement.classList.add("dark")
-      : document.documentElement.classList.remove("dark");
-  }
-
-  onMount(() => {
-    const theme = localStorage.getItem("theme");
-    if (theme === "dark") {
-      darkMode = true;
-      document.documentElement.classList.add("dark");
-    }
-  });
 </script>
 
-<div class="navbar">
+<div class="navbar relative">
   <div class="flex">
     <button
       class="sidebar-toggle md:hidden sm:block me-4"
@@ -39,9 +23,7 @@
     {/if}
     <div class="navbar-title">{$pageSettings?.page_title}</div>
   </div>
-  <button class="dark-mode-toggle" on:click={handleDarkModeToggle}
-    >{darkMode ? "🌞" : "🌛"}</button
-  >
+  <DarkModeToggle />
 </div>
 
 <style>

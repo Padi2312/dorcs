@@ -66,9 +66,7 @@ impl DorcsFile {
         };
 
         let meta_data = MetaData::from_string(&content);
-
-        let content = MetaData::remove_meta_data(&content);
-
+        let content = MetaData::remove_meta_data(&content).trim().to_string();
         DorcsFile {
             path,
             meta_data,
