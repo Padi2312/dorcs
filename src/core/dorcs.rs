@@ -1,9 +1,10 @@
 use super::{dorcs_file::DorcsFile, embedded::Asset, file_handler::FileHandler, wizard};
+use crate::auto_reload::auto_reload::DirWatcher;
 use crate::config::config::Config;
 use crate::navigation::{node::SerializableNavigationNode, tree::NavigationTree};
 use crate::server::server::Server;
 use serde_json::json;
-use std::sync::{Arc, Mutex};
+
 
 use std::{
     fs::{self, File},
@@ -123,42 +124,39 @@ impl Dorcs {
         std::fs::write(page_settings_path, page_settings).unwrap();
     }
 
-    pub async fn serve(&self) {
-        let self_arc = Arc::new(Mutex::new(self));
-
-        let output = self_arc.lock().unwrap().config.output.clone();
-        let port = self_arc.lock().unwrap().config.server.port.clone();
+    pub async fn serve(&mut self) {
+        let output = self.config.output.clone();
+        let source = self.config.source.clone();
+        let port = self.config.server.port.clone();
 
         // Start the server in a separate thread.
         let server_handle = tokio::spawn(async move {
             Server::new(output.as_str(), &port).run().await.unwrap();
         });
-        let _ = server_handle.await;
-        // if self_arc.lock().unwrap().config.server.auto_reload {
-        //     let self_clone = Arc::clone(&self_arc);
-        //     let dir_watcher = DirWatcher::new(
-        //         PathBuf::from(&self_clone.lock().unwrap().config.source),
-        //         move |event| {
-        //             let self_clone_inside = Arc::clone(&self_clone);
-        //             println!("{:#?}", event);
-        //             let file = DorcsFile::new(event);
+        if self.config.server.auto_reload {
+            println!(
+                "Auto-reload enabled. Watching for file changes in '{}'",
+                source
+            );
+            let (tx, mut rx) = tokio::sync::mpsc::channel::<PathBuf>(100);
+            let dir_watcher = DirWatcher::new(PathBuf::from(source), tx);
 
-        //             // Access `process_file` method inside a blocking context to avoid runtime errors
-        //             // caused by the synchronous lock operation.
-        //                 self_clone_inside.lock().unwrap().process_file(file);
-        //             // tokio::task::spawn_blocking(move || {
-        //             //     self_clone_inside.lock().unwrap().process_file(file);
-        //             // });
-        //         },
-        //     );
+            tokio::spawn(async move {
+                // Start watching in a separate task
+                if let Err(e) = dir_watcher.watch().await {
+                    eprintln!("Error while watching directory: {:?}", e);
+                }
+            });
 
-        //     let watcher_handle = tokio::spawn(async move {
-        //         dir_watcher.watch().await.unwrap();
-        //     });
-
-        //     let _ = tokio::join!(server_handle, watcher_handle);
-        // } else {
-        //     let _ = server_handle.await;
-        // }
+            // Listen for messages on the receiver in the main context
+            while let Some(path) = rx.recv().await {
+                println!("File changed or created: {:?}", path);
+                let file = DorcsFile::new(path);
+                self.process_file(file);
+                // Process the file change or creation here
+            }
+        } else {
+            let _ = server_handle.await;
+        }
     }
 }
