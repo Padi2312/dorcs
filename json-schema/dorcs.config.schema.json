@@ -19,6 +19,16 @@
         }
       ]
     },
+    "server": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ServerSettingsJsonSchema"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
     "source": {
       "type": [
         "string",
@@ -41,6 +51,31 @@
             "string",
             "null"
           ]
+        }
+      }
+    },
+    "ServerSettingsJsonSchema": {
+      "type": "object",
+      "properties": {
+        "auto_reload": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "enabled": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "port": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "format": "uint16",
+          "minimum": 0.0
         }
       }
     }

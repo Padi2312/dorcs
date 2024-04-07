@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use super::page_settings::PageSettings;
+use super::{page_settings::PageSettings, server_settings::ServerSettings};
 use dorcs_json_schema::ConfigJsonSchema;
 use serde::{Deserialize, Serialize};
 
@@ -8,6 +8,7 @@ use serde::{Deserialize, Serialize};
 pub struct Config {
     pub source: String,
     pub output: String,
+    pub server: ServerSettings,
     pub page_settings: PageSettings,
 }
 
@@ -16,6 +17,7 @@ impl Default for Config {
         Config {
             source: "docs".to_string(),
             output: "output".to_string(),
+            server: ServerSettings::default(),
             page_settings: PageSettings::load(None),
         }
     }
@@ -38,18 +40,12 @@ impl Config {
         let output = config_schema.output.unwrap_or("output".to_string());
 
         let page_settings_json = config_schema.page_settings;
-        if page_settings_json.is_none() {
-            return Config {
-                source,
-                output,
-                page_settings: PageSettings::load(None),
-            };
-        }
-        let page_settings_json = page_settings_json.unwrap();
-        Config {
+        let server_settings_json = config_schema.server;
+        return Config {
             source,
             output,
-            page_settings: PageSettings::load(Some(page_settings_json)),
-        }
+            page_settings: PageSettings::load(page_settings_json),
+            server: ServerSettings::load(server_settings_json),
+        };
     }
 }

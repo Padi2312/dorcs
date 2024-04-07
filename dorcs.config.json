@@ -3,5 +3,10 @@
     "page_settings": {
         "icon": "dorcs_logo.png",
         "page_title": "Dorcs"
+    },
+    "server": {
+        "port": 3000,
+        "enabled": true,
+        "auto_reload": true
     }
 }

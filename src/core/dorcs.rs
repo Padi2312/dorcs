@@ -1,7 +1,10 @@
 use super::{dorcs_file::DorcsFile, embedded::Asset, file_handler::FileHandler, wizard};
 use crate::config::config::Config;
 use crate::navigation::{node::SerializableNavigationNode, tree::NavigationTree};
+use crate::server::server::Server;
 use serde_json::json;
+use std::sync::{Arc, Mutex};
+
 use std::{
     fs::{self, File},
     io::Write,
@@ -120,7 +123,42 @@ impl Dorcs {
         std::fs::write(page_settings_path, page_settings).unwrap();
     }
 
-    pub fn serve(&self) {
-        // TODO: Implement built in server for serving the generated files
+    pub async fn serve(&self) {
+        let self_arc = Arc::new(Mutex::new(self));
+
+        let output = self_arc.lock().unwrap().config.output.clone();
+        let port = self_arc.lock().unwrap().config.server.port.clone();
+
+        // Start the server in a separate thread.
+        let server_handle = tokio::spawn(async move {
+            Server::new(output.as_str(), &port).run().await.unwrap();
+        });
+        let _ = server_handle.await;
+        // if self_arc.lock().unwrap().config.server.auto_reload {
+        //     let self_clone = Arc::clone(&self_arc);
+        //     let dir_watcher = DirWatcher::new(
+        //         PathBuf::from(&self_clone.lock().unwrap().config.source),
+        //         move |event| {
+        //             let self_clone_inside = Arc::clone(&self_clone);
+        //             println!("{:#?}", event);
+        //             let file = DorcsFile::new(event);
+
+        //             // Access `process_file` method inside a blocking context to avoid runtime errors
+        //             // caused by the synchronous lock operation.
+        //                 self_clone_inside.lock().unwrap().process_file(file);
+        //             // tokio::task::spawn_blocking(move || {
+        //             //     self_clone_inside.lock().unwrap().process_file(file);
+        //             // });
+        //         },
+        //     );
+
+        //     let watcher_handle = tokio::spawn(async move {
+        //         dir_watcher.watch().await.unwrap();
+        //     });
+
+        //     let _ = tokio::join!(server_handle, watcher_handle);
+        // } else {
+        //     let _ = server_handle.await;
+        // }
     }
 }

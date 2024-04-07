@@ -1,9 +1,17 @@
 pub mod config;
-mod core;
+pub mod core;
+pub mod auto_reload;
 pub mod navigation;
+pub mod server;
 
 use core::dorcs::Dorcs;
 
-fn main() {
-    Dorcs::new().init();
+#[tokio::main]
+async fn main() {
+    let mut dorcs = Dorcs::new();
+    dorcs.init();
+
+    if dorcs.config.server.enabled {
+        dorcs.serve().await;
+    }
 }
