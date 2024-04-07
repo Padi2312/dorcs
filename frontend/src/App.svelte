@@ -40,7 +40,7 @@
     await router.init(onRouteChange);
     routes = router.getRoutes();
     if (window.location.pathname === "/") {
-      window.history.pushState({}, "", "/index.html");
+      window.history.pushState({}, "", "/index");
     }
     router.navigate(window.location.pathname);
   };

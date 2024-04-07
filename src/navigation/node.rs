@@ -82,7 +82,7 @@ impl NavigationNode {
 
     fn prepare_url(path: &str) -> String {
         let url = format!("pages/{}", path);
-        let url = url.replace(".md", ".html");
+        let url = url.replace(".md", "");
         let url = url.replace("\\", "/");
         url
     }
