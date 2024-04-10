@@ -42,14 +42,12 @@ jobs:
           path: ${{ github.workspace }}/build/dorcs-${{ matrix.os }}-${{ matrix.goarch }}.zip
 
       - name: Tag commit
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
         run: |
           git tag ${{ env.VERSION }}
           git push origin ${{ env.VERSION }}
 
       - name: Release
         uses: softprops/action-gh-release@v1
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
         with:
           files: ${{ github.workspace }}/build/dorcs-${{ matrix.os }}-${{ matrix.goarch }}.zip
           tag_name: ${{ env.VERSION }}
