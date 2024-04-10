@@ -29,18 +29,7 @@ jobs:
         run: |
           go generate ./build/gen.go
           GOOS=${{ matrix.os }} GOARCH=${{ matrix.goarch }} go build -o ${{ github.workspace }}/build/dorcs-${{ matrix.os }}-${{ matrix.goarch }}${{ matrix.os == 'windows' && '.exe' || '' }} main.go
-
-      - name: Archive build
-        run: |
-          binary_name=dorcs-${{ matrix.os }}-${{ matrix.goarch }}${{ matrix.os == 'windows' && '.exe' || '' }}
-          echo "ASSET=${{ github.workspace }}/build/$binary_name" >> $GITHUB_ENV
-        # zip -j ${{ github.workspace }}/build/$binary_name.zip ${{ github.workspace }}/build/$binary_name
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: dorcs-${{ matrix.os }}-${{ matrix.goarch }}
-          path: ${{ github.workspace }}/build/dorcs-${{ matrix.os }}-${{ matrix.goarch }}.zip
+          echo "ASSET=${{ github.workspace }}/build/dorcs-${{ matrix.os }}-${{ matrix.goarch }}${{ matrix.os == 'windows' && '.exe' || '' }}" >> $GITHUB_ENV
 
       - name: Tag commit
         run: |
