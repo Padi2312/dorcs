@@ -17,8 +17,6 @@
 # Go test output
 /test_output/
 
-/go.sum
-
 # IDE-specific files
 .idea/
 .vscode/
