@@ -1,74 +1,51 @@
-name: Build and release dorcs 
-on:
-  push:
-    branches:
-      - main
+name: Release dorcs
+on: workflow_dispatch
 
 jobs:
   build-and-upload:
     name: Build and upload
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        include:
-          - build: linux
-            os: ubuntu-latest
-            target: x86_64-unknown-linux-musl
+        os: [linux, windows]
+        goarch: [amd64]  # Add more architectures if needed
 
-          # - build: macos | # NOPE I DONT DO THIS. YOU'RE RICH ENOUGH TO DO IT YOURSELF.
-          #   os: macos-latest
-          #   target: x86_64-apple-darwin
-
-          - build: windows-gnu
-            os: ubuntu-latest
-            target: x86_64-pc-windows-gnu
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # Get version from cargo.toml
       - name: Get version
-        id: get_version
-        run: echo "VERSION=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')" >> $GITHUB_ENV
-
-      - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          # Make Rust compile to our target (defined in the matrix)
-          targets: ${{ matrix.target }}
-
-      - name: Install mingw-w64
-        if: matrix.build == 'windows-gnu'
         run: |
-          sudo apt-get update
-          sudo apt-get install -y mingw-w64 zip
+          version=$(grep -o 'var version = "[^"]*"' main.go | cut -d'"' -f2)
+          echo "VERSION=$version" >> $GITHUB_ENV
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.22.2'  # Use the Go version that your project requires
 
       - name: Build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: --verbose --release --target ${{ matrix.target }} 
-
-      - name: Build archive
-        shell: bash
         run: |
-          binary_name="dorcs"
+          GOOS=${{ matrix.os }} GOARCH=${{ matrix.goarch }} go build -o ${{ github.workspace }}/build/dorcs-${{ matrix.os }}-${{ matrix.goarch }}${{ matrix.os == 'windows' && '.exe' || '' }} main.go
 
-          dirname="$binary_name-${{ env.VERSION }}-${{ matrix.target }}"
-          mkdir "$dirname"
-          if [ "${{ matrix.build}}" = "windows-gnu" ]; then
-            mv "target/${{ matrix.target }}/release/$binary_name.exe" "$dirname/$binary_name.exe"
-            echo "ASSET=$dirname/$binary_name.exe" >> $GITHUB_ENV
-          else
-            mv "target/${{ matrix.target }}/release/$binary_name" "$dirname/$binary_name"
-            echo "ASSET=$dirname/$binary_name" >> $GITHUB_ENV
-          fi
+      - name: Archive build
+        run: |
+          binary_name=dorcs-${{ matrix.os }}-${{ matrix.goarch }}${{ matrix.os == 'windows' && '.exe' || '' }}
+          zip -j ${{ github.workspace }}/build/$binary_name.zip ${{ github.workspace }}/build/$binary_name
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: dorcs-${{ matrix.os }}-${{ matrix.goarch }}
+          path: ${{ github.workspace }}/build/dorcs-${{ matrix.os }}-${{ matrix.goarch }}.zip
 
       - name: Tag commit
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
         run: |
           git tag ${{ env.VERSION }}
           git push origin ${{ env.VERSION }}
+
 
       - name: Release
         uses: softprops/action-gh-release@v1

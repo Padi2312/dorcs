@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$defs": {
+    "PageSettings": {
+      "properties": {
+        "page_title": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "page_title",
+        "icon"
+      ]
+    },
+    "ServerSettings": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "port": {
+          "type": "integer"
+        },
+        "auto_reload": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "enabled",
+        "port",
+        "auto_reload"
+      ]
+    }
+  },
+  "properties": {
+    "source": {
+      "type": "string"
+    },
+    "output": {
+      "type": "string"
+    },
+    "server": {
+      "$ref": "#/$defs/ServerSettings"
+    },
+    "page_settings": {
+      "$ref": "#/$defs/PageSettings"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object"
+}
