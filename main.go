@@ -7,7 +7,7 @@ import (
 	"github.com/padi2312/dorcs/pkg/dorcs"
 )
 
-var version = "0.4.0"
+var version = "0.4.0-alpha-2"
 
 //go:embed frontend/dist/*
 var assets embed.FS
