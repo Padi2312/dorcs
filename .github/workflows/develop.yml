@@ -33,7 +33,8 @@ jobs:
       - name: Archive build
         run: |
           binary_name=dorcs-${{ matrix.os }}-${{ matrix.goarch }}${{ matrix.os == 'windows' && '.exe' || '' }}
-          zip -j ${{ github.workspace }}/build/$binary_name.zip ${{ github.workspace }}/build/$binary_name
+          echo "ASSET=${{ github.workspace }}/build/$binary_name" >> $GITHUB_ENV
+        # zip -j ${{ github.workspace }}/build/$binary_name.zip ${{ github.workspace }}/build/$binary_name
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
@@ -49,6 +50,7 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          files: ${{ github.workspace }}/build/dorcs-${{ matrix.os }}-${{ matrix.goarch }}.zip
+          files: |
+            ${{ env.ASSET }}
           tag_name: ${{ env.VERSION }}
           prerelease: true
