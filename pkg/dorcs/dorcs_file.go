@@ -1,4 +1,4 @@
-package dorcs 
+package dorcs
 
 import (
 	"log/slog"

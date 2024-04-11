@@ -1,8 +1,7 @@
 {
-    "$schema": "./json-schema/dorcs.config.schema.json",
+    "$schema": "./dorcs.config.schema.json",
     "page_settings": {
-        "icon": "dorcs_logo.png",
-        "page_title": "Dorcs"
+        "icon": "dorcs_logo.png"
     },
     "server": {
         "port": 3000,

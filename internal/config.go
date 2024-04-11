@@ -9,10 +9,11 @@ import (
 const DefaultConfigPath = "dorcs.config.json"
 
 type Config struct {
-	Source       *string         `json:"source,omitempty"`
-	Output       *string         `json:"output,omitempty"`
-	Server       *ServerSettings `json:"server,omitempty"`
-	PageSettings *PageSettings   `json:"page_settings,omitempty"`
+	Source       *string         `json:"source"`
+	Output       *string         `json:"output"`
+	Server       *ServerSettings `json:"server"`
+	PageSettings *PageSettings   `json:"page_settings"`
+	Schema       *string         `json:"schema"`
 }
 
 func NewConfig() *Config {
@@ -37,17 +38,19 @@ func Default() *Config {
 	source := "docs"
 	output := "output"
 	pageTitle := "Documentation"
+	schema := "https://dorcs.allthing.eu/dorcs.config.schema.json"
 
 	return &Config{
 		Source:       &source,
 		Output:       &output,
 		Server:       &ServerSettings{Port: 8080},
 		PageSettings: &PageSettings{PageTitle: &pageTitle},
+		Schema:       &schema,
 	}
 }
 
 func ConfigFromFile() (*Config, error) {
-	c := &Config{}
+	c := Default()
 
 	// Read file
 	file, err := os.Open(DefaultConfigPath)
@@ -66,23 +69,6 @@ func ConfigFromFile() (*Config, error) {
 	err = json.Unmarshal(content, c)
 	if err != nil {
 		return nil, err
-	}
-
-	// Set default values for nullable fields
-	if c.Source == nil {
-		source := "docs"
-		c.Source = &source
-	}
-	if c.Output == nil {
-		output := "output"
-		c.Output = &output
-	}
-	if c.Server == nil {
-		c.Server = &ServerSettings{Port: 8080}
-	}
-	if c.PageSettings == nil {
-		pageTitle := "Documentation"
-		c.PageSettings = &PageSettings{PageTitle: &pageTitle}
 	}
 
 	return c, nil

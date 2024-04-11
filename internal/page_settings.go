@@ -1,4 +1,4 @@
-package internal 
+package internal
 
 type PageSettings struct {
 	PageTitle *string `json:"page_title"`

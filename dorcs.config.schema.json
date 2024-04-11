@@ -1,57 +1,62 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$defs": {
-    "PageSettings": {
+  "definitions": {
+    "InternalPageSettings": {
       "properties": {
-        "page_title": {
-          "type": "string"
-        },
         "icon": {
-          "type": "string"
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "page_title": {
+          "type": [
+            "null",
+            "string"
+          ]
         }
       },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "page_title",
-        "icon"
-      ]
+      "type": "object"
     },
-    "ServerSettings": {
+    "InternalServerSettings": {
       "properties": {
+        "auto_reload": {
+          "type": "boolean"
+        },
         "enabled": {
           "type": "boolean"
         },
         "port": {
           "type": "integer"
-        },
-        "auto_reload": {
-          "type": "boolean"
         }
       },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "enabled",
-        "port",
-        "auto_reload"
-      ]
+      "type": "object"
     }
   },
   "properties": {
-    "source": {
-      "type": "string"
-    },
     "output": {
-      "type": "string"
-    },
-    "server": {
-      "$ref": "#/$defs/ServerSettings"
+      "type": [
+        "null",
+        "string"
+      ]
     },
     "page_settings": {
-      "$ref": "#/$defs/PageSettings"
+      "$ref": "#/definitions/InternalPageSettings"
+    },
+    "schema": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "server": {
+      "$ref": "#/definitions/InternalServerSettings"
+    },
+    "source": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   },
-  "additionalProperties": false,
   "type": "object"
 }
