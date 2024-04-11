@@ -8,6 +8,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/padi2312/dorcs/internal"
 	"github.com/padi2312/dorcs/pkg/navigation"
@@ -15,9 +16,10 @@ import (
 )
 
 type Dorcs struct {
-	Config       *internal.Config
-	Tree         *navigation.Tree
-	clientAssets embed.FS
+	Config            *internal.Config
+	Tree              *navigation.Tree
+	clientAssets      embed.FS
+	LatestModifiedUrl *string
 }
 
 func NewDorcs(clientAssets embed.FS) *Dorcs {
@@ -31,7 +33,12 @@ func NewDorcs(clientAssets embed.FS) *Dorcs {
 	}
 }
 
-func (d *Dorcs) Run() {
+func (d *Dorcs) SetWatchMode() {
+	*d.Config.PageSettings.Dev = true
+}
+
+func (d *Dorcs) Build() {
+	start := time.Now()
 	ph := NewPathHandler(*d.Config.Source)
 	markdownFiles := ph.GetMarkdownFiles()
 	assetFiles := ph.GetAssetFiles()
@@ -65,26 +72,38 @@ func (d *Dorcs) Run() {
 		slog.Error("Error writing client assets:", errClientAssets)
 		return
 	}
-
+	duration := time.Since(start)
+	slog.Info("✅ Build complete in " + duration.Round(time.Millisecond).String())
 }
 
 func (d *Dorcs) processMarkdownFiles(files []string) error {
 	for _, file := range files {
-		df := NewDorcsFile(file)
-		n := &navigation.Node{
-			Path:      df.Path,
-			Title:     df.MetaData.Title,
-			URL:       df.Path,
-			Position:  df.MetaData.Position,
-			HasConent: df.HasContent(),
-		}
-		d.Tree.AddNode(n)
-
-		err := d.writeFileToOutput(df)
+		err := d.ProcessFile(file)
 		if err != nil {
 			return err
 		}
 	}
+	return nil
+}
+
+func (d *Dorcs) ProcessFile(file string) error {
+	df := NewDorcsFile(file)
+	n := &navigation.Node{
+		Path:      df.Path,
+		Title:     df.MetaData.Title,
+		URL:       df.Path,
+		Position:  df.MetaData.Position,
+		HasConent: df.HasContent(),
+	}
+	d.Tree.AddNode(n)
+
+	err := d.writeFileToOutput(df)
+	if err != nil {
+		return err
+	}
+
+	latestUrl := d.Tree.PrepareUrlFromPath(df.Path)
+	d.LatestModifiedUrl = &latestUrl
 	return nil
 }
 

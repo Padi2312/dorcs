@@ -2,6 +2,12 @@
   "definitions": {
     "InternalPageSettings": {
       "properties": {
+        "dev": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        },
         "icon": {
           "type": [
             "null",
@@ -19,9 +25,6 @@
     },
     "InternalServerSettings": {
       "properties": {
-        "auto_reload": {
-          "type": "boolean"
-        },
         "enabled": {
           "type": "boolean"
         },

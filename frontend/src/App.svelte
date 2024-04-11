@@ -6,10 +6,12 @@
   import Navbar from "./lib/components/Navbar.svelte";
   import Sidebar from "./lib/components/Sidebar.svelte";
   import type { Route } from "./lib/types";
-  import { fetchPageSettings } from "./lib/settingsStore";
+  import { fetchPageSettings, pageSettings } from "./lib/settingsStore";
+  import { DorcsSocket } from "./lib/Websocket";
 
   const router: Router = new Router();
   const contentLoader = new ContentLoader();
+  let webSocket: DorcsSocket | null = null;
 
   let routes: Route[] = [];
   let content: string = "";
@@ -22,11 +24,31 @@
     window.addEventListener("click", handleClick);
     window.addEventListener("popstate", onBackNavigation);
 
+    // Subscribe pageSettings to changes
+    pageSettings.subscribe((value) => {
+      console.log(value);
+      if (value?.dev) {
+        webSocket = new DorcsSocket(
+          `ws://${window.location.host}/ws`,
+          onWebsocketMessage
+        );
+      } else {
+        webSocket = null;
+      }
+    });
+
     return () => {
       window.removeEventListener("click", handleClick);
       window.removeEventListener("popstate", onBackNavigation);
     };
   });
+
+  const onWebsocketMessage = async (wsData: MessageEvent) => {
+    onRouteChange(
+      { url: wsData.data, children: [], position: 0, title: "" },
+      true
+    );
+  };
 
   const onBackNavigation = (ev: PopStateEvent) => {
     router.navigate(window.location.pathname);
@@ -45,9 +67,9 @@
     router.navigate(window.location.pathname);
   };
 
-  const onRouteChange = async (route: Route) => {
+  const onRouteChange = async (route: Route, force = false) => {
     try {
-      const data = await contentLoader.fetchContent(route.url);
+      const data = await contentLoader.fetchContent(route.url, force);
       if (data) {
         content = data;
       }

@@ -9,7 +9,6 @@ export const fetchPageSettings = async () => {
     const response = await fetch("/page_settings.json");
     const data = await response.json();
     pageSettings.set(data);
-    console.log(data)
   } catch (error) {
     console.error('Failed to fetch data:', error);
   }

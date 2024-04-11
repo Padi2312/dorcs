@@ -4,8 +4,6 @@
         "icon": "dorcs_logo.png"
     },
     "server": {
-        "port": 3000,
-        "enabled": true,
-        "auto_reload": true
+        "port": 3000
     }
 }

@@ -21,6 +21,21 @@ func NewTree(rootDir string) *Tree {
 	}
 }
 
+func (t *Tree) FindNodeByPath(path string) *Node {
+	components := t.getPathComponents(path)
+	currentNode := t.Root
+	for _, component := range components {
+		componentStr := component
+		child := currentNode.FindChildByPath(componentStr)
+		if child != nil {
+			currentNode = child
+		} else {
+			return nil
+		}
+	}
+	return currentNode
+}
+
 func (t *Tree) AddNode(n *Node) {
 	if t.isSectionIndexFile(n.Path) {
 		t.insertSectionIndex(n)
@@ -45,7 +60,7 @@ func (t *Tree) Insert(n *Node) {
 		if child != nil {
 			currentNode = child
 		} else {
-			urlPath := t.prepareUrlFromPath(n.Path)
+			urlPath := t.PrepareUrlFromPath(n.Path)
 			newNode := &Node{
 				Path:      componentStr,
 				Title:     n.Title,
@@ -76,7 +91,7 @@ func (t *Tree) insertSectionIndex(n *Node) {
 			currentNode.Title = n.Title
 			currentNode.Position = n.Position
 			if n.HasConent {
-				currentNode.URL = t.prepareUrlFromPath(n.Path)
+				currentNode.URL = t.PrepareUrlFromPath(n.Path)
 			} else {
 				currentNode.URL = ""
 			}
@@ -105,7 +120,7 @@ func (t *Tree) getPathComponents(path string) []string {
 	return components
 }
 
-func (t *Tree) prepareUrlFromPath(path string) string {
+func (t *Tree) PrepareUrlFromPath(path string) string {
 	var urlPath string = path
 	urlPath = strings.TrimPrefix(urlPath, t.Root.Path)
 	urlPath = strings.TrimSuffix(urlPath, ".md")

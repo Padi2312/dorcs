@@ -21,6 +21,7 @@ func NewDorcsFile(path string) *DorcsFile {
 	if err != nil {
 		slog.Error(err.Error())
 	}
+
 	var content = string(raw_content)
 
 	meta_data := ParseMetadata(content)

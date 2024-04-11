@@ -39,12 +39,13 @@ func Default() *Config {
 	output := "output"
 	pageTitle := "Documentation"
 	schema := "https://dorcs.allthing.eu/dorcs.config.schema.json"
+	dev := false
 
 	return &Config{
 		Source:       &source,
 		Output:       &output,
 		Server:       &ServerSettings{Port: 8080},
-		PageSettings: &PageSettings{PageTitle: &pageTitle},
+		PageSettings: &PageSettings{PageTitle: &pageTitle, Dev: &dev},
 		Schema:       &schema,
 	}
 }
