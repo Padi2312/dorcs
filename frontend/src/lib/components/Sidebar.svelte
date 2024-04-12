@@ -22,7 +22,7 @@
 <style>
   .sidebar {
     @apply px-4 lg:w-96 md:w-72 h-full border-r dark:border-gray-700 border-gray-200 z-30
-    hidden w-full sm:w-screen md:block md:relative absolute bg-white dark:bg-zinc-800;
+    hidden w-full sm:w-screen md:block md:relative absolute bg-background;
   }
 
   .sidebar.visible {

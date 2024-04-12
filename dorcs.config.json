@@ -1,3 +1,9 @@
 {
-    "page_title": "Dorcs Documentation"
+    "$schema": "./dorcs.config.schema.json",
+    "page_settings": {
+        "icon": "dorcs_logo.png"
+    },
+    "server": {
+        "port": 3000
+    }
 }

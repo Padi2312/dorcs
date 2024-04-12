@@ -1,3 +1,26 @@
-/target
-*/target
-output
+# Compiled Object files, Static and Dynamic libs (Shared Objects)
+*.o
+*.a
+*.so
+
+# Executables
+*.exe
+*.out
+
+# Go binary
+/bin/
+
+# Go build cache and test cache
+/.cache/
+/.testcache/
+
+# Go test output
+/test_output/
+
+# IDE-specific files
+.idea/
+.vscode/
+
+output/
+
+frontend/dist

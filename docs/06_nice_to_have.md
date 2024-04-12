@@ -16,7 +16,6 @@ If you have any suggestions, feel free to open an issue on the [GitHub repositor
   - For example: `01_introduction.md`, `02_quick_start.md`, `03_usage.md`
   - Gets into: Introduction, Quick Start, Usage (in this order)
   - Dont need to specify the position in the metadata of the markdown files every time
-- Starting the Dorcs with a `--watch` flag to automatically regenerate the documentation when a file changes
 
 ## Code Blocks
 

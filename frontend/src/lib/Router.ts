@@ -47,11 +47,15 @@ export class Router {
     public findRoute(url: string): Route | null {
         const findRoute = (routes: Route[]): Route | null => {
             for (const route of routes) {
-                if (route.url === url) {
+                // Add `pages/` prefix to route.url to match the URL
+                // This is necessary because the URL is relative to the root
+                // of the server, but the route.url is relative to the `pages/` directory
+                const new_url = `pages/${url.startsWith("/") ? url.slice(1) : url}`;
+                if (route.url === new_url) {
                     return route;
                 }
 
-                if (route.children) {
+                if (route.children && route.children.length > 0) {
                     const foundRoute = findRoute(route.children);
                     if (foundRoute) {
                         return foundRoute;

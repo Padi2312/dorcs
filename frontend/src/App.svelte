@@ -6,18 +6,36 @@
   import Navbar from "./lib/components/Navbar.svelte";
   import Sidebar from "./lib/components/Sidebar.svelte";
   import type { Route } from "./lib/types";
+  import { fetchPageSettings, pageSettings } from "./lib/settingsStore";
+  import { DorcsSocket } from "./lib/Websocket";
+
   const router: Router = new Router();
   const contentLoader = new ContentLoader();
+  let webSocket: DorcsSocket | null = null;
 
   let routes: Route[] = [];
   let content: string = "";
   let sidebarVisible = true;
 
   onMount(() => {
+    fetchPageSettings();
     init();
     sidebarVisible = !checkMobileDevice();
     window.addEventListener("click", handleClick);
     window.addEventListener("popstate", onBackNavigation);
+
+    // Subscribe pageSettings to changes
+    pageSettings.subscribe((value) => {
+      console.log(value);
+      if (value?.dev) {
+        webSocket = new DorcsSocket(
+          `ws://${window.location.host}/ws`,
+          onWebsocketMessage
+        );
+      } else {
+        webSocket = null;
+      }
+    });
 
     return () => {
       window.removeEventListener("click", handleClick);
@@ -25,9 +43,14 @@
     };
   });
 
+  const onWebsocketMessage = async (wsData: MessageEvent) => {
+    onRouteChange(
+      { url: wsData.data, children: [], position: 0, title: "" },
+      true
+    );
+  };
+
   const onBackNavigation = (ev: PopStateEvent) => {
-    // console.log(ev);
-    // ev.preventDefault();
     router.navigate(window.location.pathname);
   };
 
@@ -44,9 +67,9 @@
     router.navigate(window.location.pathname);
   };
 
-  const onRouteChange = async (route: Route) => {
+  const onRouteChange = async (route: Route, force = false) => {
     try {
-      const data = await contentLoader.fetchContent(route.url);
+      const data = await contentLoader.fetchContent(route.url, force);
       if (data) {
         content = data;
       }
@@ -76,15 +99,14 @@
 
   function handleSidebarToggle() {
     sidebarVisible = !sidebarVisible;
-    console.log("Sidebar toggle", sidebarVisible);
   }
 </script>
 
-<div class="text-gray-700 dark:text-gray-200 bg-white dark:bg-zinc-800 h-full">
+<div class="text-textColor bg-background h-full">
   <Navbar on:sidebarToggle={handleSidebarToggle} />
-  <div class="flex">
+  <div class="flex bg-inherit">
     <Sidebar {routes} bind:visible={sidebarVisible} />
-    <div class="w-full flex justify-center relative max-w-full">
+    <div class="w-full flex justify-center max-w-full">
       <Content {content} />
     </div>
   </div>
