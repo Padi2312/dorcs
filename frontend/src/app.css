@@ -8,7 +8,7 @@
     --color-text: #1a202c;
     --color-table-body: #f5f5f5;
     --color-table-header: #d7d7d7;
-    --color-code-background: var(--color-table-body);
+    --color-code-background: #ebebeb;
   }
 
   :root[class~="dark"] {
@@ -16,7 +16,7 @@
     --color-text: #e1e1e1;
     --color-table-body: #2d2d2d;
     --color-table-header: #1d1d1d;
-    --color-code-background: var(--color-table-body);
+    --color-code-background: #3c3c3c;
   }
 }
 
@@ -28,8 +28,7 @@ body,
   padding: 0;
   margin: 0;
   display: block;
-  /* @apply bg-background; */
-  /* @apply text-textColor bg-white dark:bg-zinc-800 */
+  @apply bg-background text-textColor;
 }
 
 main {
@@ -71,20 +70,25 @@ pre {
   white-space: pre;
 }
 
-/* code {
-  @apply text-gray-800 dark:text-gray-100;
-} */
+code {
+  @apply bg-code-background rounded-md p-1;
+}
 
 p {
   @apply my-4;
 }
 
+ol {
+  list-style: auto;
+}
+
 ul {
-  @apply my-4
+  @apply my-4;
+  list-style: disc;
 }
 
 li {
-  @apply list-disc ml-4;
+  @apply ml-4 mb-2;
 }
 
 hr {

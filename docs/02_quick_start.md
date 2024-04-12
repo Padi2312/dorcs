@@ -5,7 +5,7 @@ position: 2
 
 # Quick Start
 
-So you want to get started with Dorcs? Here's a quick guide to help you get started. You should also have a look at the rest of the documentation to get a better understanding of the features and limitations of Dorcs.
+I promise you, we'll get over this very quickly. -  _Although you should read the rest of the documentation😉_
 
 ## Installation
 
@@ -15,26 +15,29 @@ You can download the latest release from the [releases page](https://github.com/
 
 ### 🔨 Build from Source
 
-For those who prefer to build from source, ensure Rust and Cargo are properly set up, then follow these steps:
+For those who prefer to build from source, ensure Go(lang) is properly set up, then follow these steps:
 
 ```sh
 git clone https://github.com/padi2312/dorcs
 cd dorcs
-cargo build --release
 
-./target/release/dorcs
+go generate ./build/gen.go
+go build -o dorcs .  # or on Windows: go build -o dorcs.exe .
 ```
 
-## Usage
+---
 
-Also have a look at the [usage guide](./03_usage) for more details.
+## 💫 Usage
 
-**Note:** You should have a `docs` directory in your project with markdown files. If you don't have one, you can create one and add some markdown files to it.
-
-To generate documentation, run the following command in your project with the documentation folder:
+1. Create a `docs` directory 
+2. Add markdown files to the `docs` directory
+3. Run the following command:
 
 ```sh
 dorcs
 ```
 
-This will generate the documentation in the `output` directory.
+This will generate the documentation by default in the `output` directory.
+
+\
+**For more information on how to use Dorcs, check out the [Usage Page](./03_usage).**

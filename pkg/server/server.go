@@ -41,8 +41,11 @@ func (s *Server) EnableWebsocket() {
 func (s *Server) Start() {
 	// Start the server
 	addr := fmt.Sprintf("0.0.0.0:%d", s.Config.Server.Port)
-	slog.Info(fmt.Sprintf("Server started on %s", addr))
-	slog.Error(http.ListenAndServe(addr, nil).Error())
+	slog.Info(fmt.Sprintf("🌐 Server started on %s", addr))
+	err := http.ListenAndServe(addr, nil)
+	if err != nil {
+		slog.Error("❌ Failed to start server: ", err)
+	}
 }
 
 func (s *Server) handleConnections(w http.ResponseWriter, r *http.Request) {

@@ -37,10 +37,23 @@ func NewDorcsFile(path string) *DorcsFile {
 }
 
 func (f *DorcsFile) ToHtml() string {
-	extensions := parser.CommonExtensions | parser.AutoHeadingIDs
+	extensions := parser.CommonExtensions |
+		parser.NoIntraEmphasis |
+		parser.Tables |
+		parser.FencedCode |
+		parser.Autolink |
+		parser.Strikethrough |
+		parser.SpaceHeadings |
+		parser.BackslashLineBreak |
+		parser.DefinitionLists |
+		parser.NoEmptyLineBeforeBlock |
+		parser.Attributes |
+		parser.HeadingIDs |
+		parser.OrderedListStart
+
 	p := parser.NewWithExtensions(extensions)
 
-	htmlFlags := html.CommonFlags | html.HrefTargetBlank
+	htmlFlags := html.CommonFlags | html.HrefTargetBlank | html.CompletePage
 	opts := html.RendererOptions{Flags: htmlFlags}
 	renderer := html.NewRenderer(opts)
 
