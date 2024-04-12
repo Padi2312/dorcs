@@ -21,7 +21,7 @@ export class Router {
         const urlObj = new URL(url, window.location.href);
         url = urlObj.pathname;
         if (url == "/") {
-            url = "/index.html";
+            url = "/index";
         }
 
         const route = this.findRoute(url);
