@@ -126,6 +126,10 @@ func (t *Tree) PrepareUrlFromPath(path string) string {
 	urlPath = strings.TrimSuffix(urlPath, ".md")
 	urlPath = strings.TrimPrefix(urlPath, "/")
 	urlPath = strings.ReplaceAll(urlPath, string(filepath.Separator), "/")
+
+	if !strings.HasPrefix(urlPath, "/") {
+		urlPath = "/" + urlPath
+	}
 	urlPath = "pages" + urlPath
 	return urlPath
 }
