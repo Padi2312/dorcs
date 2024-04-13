@@ -1,5 +1,19 @@
 <script lang="ts">
+  import hljs from "highlight.js";
+  import { afterUpdate } from "svelte";
+  // @ts-ignore
+  import CopyButtonPlugin from "highlightjs-copy";
+  import "highlightjs-copy/dist/highlightjs-copy.min.css";
+
   export let content: string = "";
+
+  // TODO: Handle this in a better way
+  afterUpdate(async () => {
+    if (content) {
+      hljs.addPlugin(new CopyButtonPlugin());
+      hljs.highlightAll();
+    }
+  });
 </script>
 
 <main class="flex md:p-10 p-4">

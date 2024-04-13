@@ -2,12 +2,13 @@
   import { onMount } from "svelte";
   import { ContentLoader } from "./lib/ContentLoader";
   import { Router } from "./lib/Router";
+  import { DorcsSocket } from "./lib/Websocket";
   import Content from "./lib/components/Content.svelte";
   import Navbar from "./lib/components/Navbar.svelte";
   import Sidebar from "./lib/components/Sidebar.svelte";
-  import type { Route } from "./lib/types";
+  import SyntaxHighlighter from "./lib/components/SyntaxHighlighter.svelte";
   import { fetchPageSettings, pageSettings } from "./lib/settingsStore";
-  import { DorcsSocket } from "./lib/Websocket";
+  import type { Route } from "./lib/types";
 
   const router: Router = new Router();
   const contentLoader = new ContentLoader();
@@ -101,6 +102,9 @@
     sidebarVisible = !sidebarVisible;
   }
 </script>
+
+<!-- This svelte component is used for setting the syntax highlighting theme -->
+<SyntaxHighlighter />
 
 <div class="text-textColor bg-background h-full">
   <Navbar on:sidebarToggle={handleSidebarToggle} />
