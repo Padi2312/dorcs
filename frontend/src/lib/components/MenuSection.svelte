@@ -25,7 +25,7 @@
     {/if}
 
     {#if route.children?.length !== 0}
-      <button class="hover:bg-gray-300 rounded-md p-1" on:click={toggleOpen}>
+      <button class="hover:bg-gray-300 rounded-md" on:click={toggleOpen}>
         {#if open}
           <IconChevronDown />
         {:else}
@@ -42,7 +42,7 @@
           <svelte:self route={child} />
         {:else}
           <a
-            class="menu-section-title"
+            class="menu-section-title my-1"
             href={child.url.replace("pages/", "/")}
             on:click
           >

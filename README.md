@@ -22,10 +22,16 @@ See Dorcs in action [here](https://dorcs.allthing.eu). (same link as the documen
 
 - **Page Metadata:** Provide a title for a certain page. You can also provide the position of the page in the sidebar.
 
+- **Hot Reload:** In watch mode, Dorcs watches the source directory for changes and regenerates the documentation whenever a change is detected.
+
+- **Built-in Server:** Dorcs starts a local server to preview the generated documentation.
+
 ## 📄 Documentation
 
-The documentation is can be found in the `docs` directory. The documentation website is generated using Dorcs itself.
-It is also online available at [dorcs.allthing.eu](https://dorcs.allthing.eu).
+The documentatoin is available at **[dorcs.allthing.eu](https://dorcs.allthing.eu).**
+
+The website is generated using Dorcs itself, you can find the source code for the documentation inside the `docs` directory.
+
 
 ## 🛠️ Setup
 
@@ -33,7 +39,20 @@ It is also online available at [dorcs.allthing.eu](https://dorcs.allthing.eu).
 
 Download pre-built binaries from the [releases section](https://github.com/Padi2312/dorcs/releases) for a quick start.
 
-#### 🧪 Experimental
+### 🛠️ Build from Source
+
+To build from source, you need to have Go(lang) installed.
+
+Clone the repository and run the following commands inside:
+
+```sh
+go generate ./build/gen.go
+
+go build -o dorcs .
+```
+
+
+### 🧪 Experimental
 
 In  `develop` branch you can find the latest features and changes. Use with caution, there may be not working features or breaking changes.
 
@@ -41,30 +60,11 @@ You can find the nightly builds marked as pre-releases in the [releases section]
 
 ## 📚 Usage
 
-To generate documentation, run the following command in your project with the documentation folder:
+1. Create a `docs` directory with an `index.md` file in it. This will be the landing page of your documentation.
+2. Run Dorcs in the directory with the `docs` folder.
 
 ```sh
 dorcs
 ```
 
 This will generate the documentation in the `output` directory.
-
-## ⚙️ Configuration
-
-Dorcs provides some settings that can be configured. The following are the default settings:
-
-| Setting  | Description         | Type   | Default Value |
-| -------- | ------------------- | ------ | ------------- |
-| `title`  | Title in the navbar | string | Documentation |
-| `source` | Source directory    | string | ./docs        |
-| `output` | Output directory    | string | ./output      |
-
-You can override the default settings with the `dorcs.config.json` file. This file should be in the root of your project.
-
-```json
-{
-  "title": "My Documentation",
-  "source": "./my_docs",
-  "output": "./my_output"
-}
-```

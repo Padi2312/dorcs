@@ -88,6 +88,13 @@ func (d *Dorcs) processMarkdownFiles(files []string) error {
 
 func (d *Dorcs) ProcessFile(file string) error {
 	df := NewDorcsFile(file)
+	var title = df.MetaData.Title
+	// In case title is not provided, use the file name as title
+	if title == "" {
+		// Get only file name without extension
+		title = strings.TrimSuffix(filepath.Base(file), filepath.Ext(file))
+		df.MetaData.Title = title
+	}
 	n := &navigation.Node{
 		Path:      df.Path,
 		Title:     df.MetaData.Title,

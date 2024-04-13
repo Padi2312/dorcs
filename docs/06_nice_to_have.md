@@ -19,11 +19,8 @@ If you have any suggestions, feel free to open an issue on the [GitHub repositor
 
 ## Code Blocks
 
-- Syntax highlighting for code blocks
-- Support for multiple languages
 - Title for code blocks
 - Line numbers for code blocks
-- Copy to clipboard button for code blocks
 - Expandable code blocks
 
 ## For starters

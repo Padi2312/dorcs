@@ -12,7 +12,7 @@ import (
 	"github.com/padi2312/dorcs/pkg/utils"
 )
 
-var version = "0.4.0"
+var version = "0.5.0"
 
 //go:embed frontend/dist/*
 var assets embed.FS
@@ -72,14 +72,13 @@ func main() {
 		})
 	}
 
-
 	if isWatchMode || isPreviewMode {
 		quit := make(chan os.Signal, 1)
-		server.Start()
+		go server.Start()
 		signal.Notify(quit, os.Interrupt)
 
 		<-quit
-		slog.Info("🚀 Exiting dorcs...")
+		slog.Info("🛑 Exiting dorcs...")
 	}
 
 }
