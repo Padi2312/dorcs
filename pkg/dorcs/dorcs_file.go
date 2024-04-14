@@ -8,6 +8,7 @@ import (
 	"github.com/gomarkdown/markdown"
 	"github.com/gomarkdown/markdown/html"
 	"github.com/gomarkdown/markdown/parser"
+	customelements "github.com/padi2312/dorcs/pkg/dorcs/custom_elements"
 )
 
 type DorcsFile struct {
@@ -52,13 +53,24 @@ func (f *DorcsFile) ToHtml() string {
 		parser.OrderedListStart
 
 	p := parser.NewWithExtensions(extensions)
+	// add custom elements
+	p.Opts.ParserHook = customelements.ParseAlertBlock
 
-	htmlFlags := html.CommonFlags | html.HrefTargetBlank | html.CompletePage
-	opts := html.RendererOptions{Flags: htmlFlags}
+	doc := markdown.Parse([]byte(f.Content), p)
+	opts := html.RendererOptions{
+		Flags:          html.CommonFlags,
+		RenderNodeHook: customelements.RenderAlertNode,
+	}
 	renderer := html.NewRenderer(opts)
+	htmlOutput := markdown.Render(doc, renderer)
+	return string(htmlOutput)
 
-	md := []byte(f.Content)
-	return string(markdown.ToHTML(md, p, renderer))
+	// htmlFlags := html.CommonFlags | html.HrefTargetBlank | html.CompletePage
+	// opts := html.RendererOptions{Flags: htmlFlags}
+	// renderer := html.NewRenderer(opts)
+
+	// md := []byte(f.Content)
+	// return string(markdown.ToHTML(md, p, renderer))
 }
 
 func (f *DorcsFile) HasContent() bool {
